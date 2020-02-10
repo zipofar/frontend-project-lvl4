@@ -1,6 +1,6 @@
 ### Requirements
 
-* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+* [Heroku Demo](https://fierce-citadel-80950.herokuapp.com/)
 
 ### Install
 
