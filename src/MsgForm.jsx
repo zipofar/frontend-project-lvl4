@@ -2,14 +2,22 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 import routes from './routes';
+import { addMsg } from '../store';
 
- export default () => (
+const mapDispatch = { addMsg };
+
+const MsgForm = (props) => (
   <div>
     <Formik
       initialValues={{ message: '' }}
-      onSubmit={(values, { setSubmitting }) => {
+      onSubmit={(values, opts) => {
+        props.addMsg({ text: values.message })
+        opts.setSubmitting()
+        console.log(opts)
+        /*
         axios.post(routes.channelMessagesPath(1), {
           data:{
             attributes:{
@@ -23,6 +31,7 @@ import routes from './routes';
         .catch(function (error) {
           console.log(error);
         });
+        */
       }}
     >
       {({
@@ -50,3 +59,8 @@ import routes from './routes';
     </Formik>
   </div>
 );
+
+export default connect(
+  null,
+  mapDispatch
+)(MsgForm);

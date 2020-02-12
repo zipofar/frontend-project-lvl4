@@ -1,10 +1,7 @@
 import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
-import io from 'socket.io-client';
 
 import MsgForm from './MsgForm';
-
-const  socket = io('http://localhost:5000');
 
 const Channel = ({ name }) => (
   <Button block className="ChannelPanel-ChannelName"># {name}</Button>
