@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 
 import MsgForm from './MsgForm';
+import MsgContainer from './MsgContainer';
 
 const Channel = ({ name }) => (
   <Button block className="ChannelPanel-ChannelName"># {name}</Button>
@@ -17,7 +18,7 @@ export default (props) => {
           ))}
         </Col>
         <Col xs="10">
-          Messages
+          <MsgContainer />
           <MsgForm />
         </Col>
       </Row>

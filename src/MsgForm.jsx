@@ -5,7 +5,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 import routes from './routes';
-import { addMsg } from '../store';
+import { addMsg } from '../store/messages';
 
 const mapDispatch = { addMsg };
 
@@ -16,7 +16,6 @@ const MsgForm = (props) => (
       onSubmit={(values, opts) => {
         props.addMsg({ text: values.message })
         opts.setSubmitting()
-        console.log(opts)
         /*
         axios.post(routes.channelMessagesPath(1), {
           data:{
