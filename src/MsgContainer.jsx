@@ -1,20 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const MsgContainer =  (props) => {
-  console.log('MsgContainer')
-  console.log(props)
+  const msg = useSelector((state) => state.msg.messages);
   return (
     <div>
-      {props.msg.map((e) => <div key={e.text}>{e.text}</div>)}
+      {msg.map((e) => <div key={e.text}>{e.text}</div>)}
     </div>
   )
 }
 
-const mapStateToProps = state => (
-  {
-    msg: state.msg,
-  }
-)
-
-export default connect(mapStateToProps)(MsgContainer);
+export default MsgContainer;
