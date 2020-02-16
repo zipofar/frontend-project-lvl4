@@ -20,7 +20,8 @@ import { initChannels, setActiveChannelId } from '../store/channels';
 console.log('gon', gon);
 
 if (process.env.NODE_ENV !== 'production') {
-  localStorage.debug = 'chat:*';
+  //localStorage.debug = 'chat:*';
+  //localStorage.debug = '*';
 }
 
 const rawUser = cookies.get('user') || '{}';
@@ -30,7 +31,7 @@ const userId = user.userId || `${username}${Date.now()}`;
 user = { username, userId };
 cookies.set('user', JSON.stringify(user));
 
-const socket = io('http://localhost:5000');
+const socket = io();
 const store = configureStore({
   reducer: rootReducer,
 });
@@ -42,6 +43,31 @@ socket.on('newMessage', (res) => {
   }
 }); 
 
+socket.on('pong', (res) => {
+  console.log('PONG')
+  console.log(socket)
+  console.log(res)
+}); 
+socket.on('ping', (res) => {
+  console.log('PING')
+  console.log(res)
+}); 
+socket.on('connect_error', (res) => {
+  console.log('connect_error')
+  console.log(res)
+}); 
+socket.on('reconnect_attempt', (res) => {
+  console.log('reconnect_attempt')
+  console.log(res)
+}); 
+socket.on('connect', (res) => {
+  console.log('connect')
+  console.log(res)
+}); 
+socket.on('disconnect', (res) => {
+  console.log('disconnect')
+  console.log(res)
+}); 
 
 store.dispatch(initMessages(gon.messages));
 store.dispatch(initChannels(gon.channels));

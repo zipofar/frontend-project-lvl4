@@ -30,6 +30,11 @@
   background-color: #4D394B;
 }
 
+.ChannelPanel-Title {
+  font-weight: 600;
+  color: #ffffff;
+}
+
 .ChannelPanel-ChannelName {
   font-weight: 600;
   color: #ffffff;
@@ -48,4 +53,23 @@
 
 .ChatWorkspace-Messages {
   flex-grow: 1;
+  padding: 0px 20px;
+  overflow-y: scroll;
+}
+
+.MessageBlock {
+  margin-bottom: 10px;
+}
+
+.MessageBlock-Username {
+  font-weight: 600;
+  font-size: .9rem;
+}
+
+.ChatWorkspace-Footer {
+  padding: 0 20px 20px 20px;
+}
+
+.Form-Group {
+  display: flex;
 }

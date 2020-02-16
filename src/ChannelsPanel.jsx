@@ -10,7 +10,6 @@ const ChannelsPanel = () => {
   const dispatch = useDispatch();
   return(
     <div>
-      <span className="ChannelPanel-ChannelName">Channels</span>
       {channels.list.map(({ id, name }) => (
         <Button
           block

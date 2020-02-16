@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button } from 'react-bootstrap';
+import { Row, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,7 +13,7 @@ const MsgForm = (props) => {
   const user = useContext(UserContext);
 
   return(
-    <div>
+    <div className="ChatWorkspace-Footer">
       <Formik
         initialValues={{ message: '' }}
         onSubmit={({ message }, opts) => {
@@ -31,16 +31,19 @@ const MsgForm = (props) => {
           isSubmitting,
         }) => (
           <form onSubmit={handleSubmit}>
-            <input
-              type="input"
-              name="message"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.message}
-            />
-            <Button type="submit" disabled={stateMessageLoading === 'request'}>
-              Submit
-            </Button>
+            <div className="Form-Group">
+              <input
+                type="input"
+                name="message"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.message}
+                className="form-control"
+              />
+              <Button type="submit" disabled={stateMessageLoading === 'request'}>
+                Send
+              </Button>
+            </div>
           </form>
         )}
       </Formik>
