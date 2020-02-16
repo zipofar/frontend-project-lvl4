@@ -1,20 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { Formik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { sendMessage } from '../store/messages';
+import { UserContext } from './index';
 
 const MsgForm = (props) => {
   const dispatch = useDispatch();
+  const stateMessageLoading = useSelector(({ msg: { loading } }) => loading);
+  const { activeChannelId } = useSelector(({ channels }) => channels)
+  const user = useContext(UserContext);
 
   return(
     <div>
       <Formik
         initialValues={{ message: '' }}
-        onSubmit={(values, opts) => {
-          dispatch(sendMessage({ text: values.message }));
-          opts.setSubmitting()
+        onSubmit={({ message }, opts) => {
+          dispatch(sendMessage({ message, ...user }, activeChannelId));
+          opts.resetForm();
         }}
       >
         {({
@@ -34,7 +38,7 @@ const MsgForm = (props) => {
               onBlur={handleBlur}
               value={values.message}
             />
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={stateMessageLoading === 'request'}>
               Submit
             </Button>
           </form>

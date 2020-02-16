@@ -1,4 +1,4 @@
-import { createSlice, combineReducers, configureStore } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../src/routes';
 
@@ -10,35 +10,43 @@ const msgSlice = createSlice({
     loading: '',
   },
   reducers: {
-    addMsgRequest: (state) => state.loading = 'request',
-    addMsgSuccess: (state, action) => {
-      state.messages.push({ text: action.payload.text });
+    initMessages: (state, { payload }) => {
+      state.messages = [ ...payload ];
+    },
+    addMsgRequest: (state) => { state.loading = 'request' },
+    addMsgSuccess: (state, { payload }) => {
+      state.messages.push({ ...payload });
       state.error = null;
       state.loading = 'success';
     },
-    addMsgFailed: (state, action) => {
-      state.error = action.payload;
+    addMsgFailed: (state, { payload }) => {
+      state.error = payload;
       state.loading = 'failed';
     },
   },
 });
 
-export const { addMsgRequest, addMsgSuccess, addMsgFailed } = msgSlice.actions;
-export const sendMessage = (message, channdelId) => async dispatch => {
+export const {
+  initMessages,
+  addMsgRequest,
+  addMsgSuccess,
+  addMsgFailed
+} = msgSlice.actions;
+
+export const sendMessage = (data, channdelId) => async dispatch => {
+  dispatch(addMsgRequest());
   let res;
   try {
-    res = await axios.post(routes.channelMessagesPath(1), {
+    res = await axios.post(routes.channelMessagesPath(channdelId), {
       data:{
-        attributes:{
-          message,
-        },
+        attributes: { ...data },
       }
     });
   } catch(err) {
     dispatch(addMsgFailed(err.toString()));
   }
-  console.log(res)
-  dispatch(addMsgSuccess(res));
+  const { data: { data: { attributes } } } = res;
+  dispatch(addMsgSuccess(attributes));
 }
 
 export default msgSlice.reducer;

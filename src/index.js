@@ -6,15 +6,16 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { configureStore } from '@reduxjs/toolkit';
 
-import '../assets/application.scss';
-
-// import faker from 'faker';
+import faker from 'faker';
 import gon from 'gon';
-// import cookies from 'js-cookie';
+import cookies from 'js-cookie';
 import io from 'socket.io-client';
 
-import Chat from './Chat';
+import '../assets/application.scss';
+import App from './App';
 import rootReducer from '../store';
+import { initMessages, addMsgSuccess } from '../store/messages';
+import { initChannels, setActiveChannelId } from '../store/channels';
 
 console.log('gon', gon);
 
@@ -22,18 +23,39 @@ if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
 
-const  socket = io('http://localhost:5000');
-socket.on('newMessage', (res) => { console.log(res) }); 
+const rawUser = cookies.get('user') || '{}';
+let user = JSON.parse(rawUser);
+const username = user.username || faker.name.findName(); 
+const userId = user.userId || `${username}${Date.now()}`;
+user = { username, userId };
+cookies.set('user', JSON.stringify(user));
 
+const socket = io('http://localhost:5000');
 const store = configureStore({
   reducer: rootReducer,
-})
+});
 
-const mountNode = document.getElementById('chat');
+socket.on('newMessage', (res) => {
+  const { data: { attributes } } = res;
+  if (attributes.userId !== user.userId) {
+    store.dispatch(addMsgSuccess(attributes));
+  }
+}); 
+
+
+store.dispatch(initMessages(gon.messages));
+store.dispatch(initChannels(gon.channels));
+store.dispatch(setActiveChannelId(gon.currentChannelId));
+
+const UserContext = React.createContext({});
 
 ReactDOM.render(
   <Provider store={store}>
-    <Chat channels={gon.channels} />
+    <UserContext.Provider value={user}>
+      <App />
+    </UserContext.Provider>
   </Provider>,
-  mountNode
+  document.getElementById('chat')
 );
+
+export { UserContext };

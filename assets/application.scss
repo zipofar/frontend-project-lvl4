@@ -1,7 +1,29 @@
 @import '~bootstrap/scss/bootstrap';
 
-.ChannelsPanel {
+.ClientContainer {
+  height: 100vh;
+  width: 100vw;
+}
 
+.ClientContainer-Header {
+  height: 56px;
+}
+
+.ClientContainer-Main {
+  height: calc(100% - 56px);
+  display: flex;
+}
+
+.ClientContainer-Left {
+  width: 220px;
+}
+
+.ClientContainer-Right {
+  width: calc(100% - 220px);
+}
+
+.ChannelsPanel {
+  overflow-y: scroll;
 }
 
 .ChannelsPanel_color_primary {
@@ -13,4 +35,17 @@
   color: #ffffff;
   background: transparent;
   border: transparent;
+}
+
+.ChannelPanel-ChannelName_active {
+  background: #46b193;
+}
+
+.ChatWorkspace {
+  display: flex;
+  flex-direction: column;
+}
+
+.ChatWorkspace-Messages {
+  flex-grow: 1;
 }
