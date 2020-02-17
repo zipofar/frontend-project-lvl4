@@ -1,27 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const CONNECT = 'connect';
-const DISCONNECT = 'disconnect';
-
-export const enumConnectionState = (state) => {
-  switch (state) {
-    case CONNECT: return CONNECT; 
-    case DISCONNECT: return DISCONNECT; 
-    default:
-      throw new Error('No this state for connection state');
-  }
-};
-
 const appSlice = createSlice({
   name: 'app',
   initialState: {
-    connectionState: '',
     errors: [],
   },
   reducers: {
-    setConnectionState: (state, { payload }) => {
-      state.connectionState = payload;
-    },
     setAppError: (state, { payload }) => {
       state.errors.push(payload);
     },
@@ -33,7 +17,6 @@ const appSlice = createSlice({
 });
 
 export const {
-  setConnectionState,
   setAppError,
   unsetAppError,
 } = appSlice.actions;
