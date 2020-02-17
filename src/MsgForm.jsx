@@ -16,6 +16,13 @@ const MsgForm = (props) => {
     <div className="ChatWorkspace-Footer">
       <Formik
         initialValues={{ message: '' }}
+        validate={values => {
+          const errors = {};
+          if (!values.message) {
+            errors.message = 'Required';
+          }
+          return errors;
+        }}
         onSubmit={({ message }, opts) => {
           dispatch(sendMessage({ message, ...user }, activeChannelId));
           opts.resetForm();
