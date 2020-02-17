@@ -73,3 +73,16 @@
 .Form-Group {
   display: flex;
 }
+
+.WarningPanel {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.WarningPanel .alert {
+  margin: 0;
+  padding: 2px;
+  text-align: center;
+  font-size: .8rem;
+}

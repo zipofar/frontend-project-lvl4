@@ -1,11 +1,13 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
 
 import MsgForm from './MsgForm';
 import MsgContainer from './MsgContainer';
 import ChannelsPanel from './ChannelsPanel';
+import WarningPanel from './WarningPanel';
 
 export default () => {
+  const appErrors = useSelector(({ app }) => app.errors);
   return (
     <React.Fragment>
       <div className="ClientContainer-Left ChannelsPanel ChannelsPanel_color_primary">
@@ -15,6 +17,7 @@ export default () => {
       <div className="ClientContainer-Right ChatWorkspace">
         <MsgContainer />
         <MsgForm />
+        <WarningPanel errors={appErrors} />
       </div>
     </React.Fragment>
   )

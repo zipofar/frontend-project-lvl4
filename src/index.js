@@ -16,72 +16,58 @@ import App from './App';
 import rootReducer from '../store';
 import { initMessages, addMsgSuccess } from '../store/messages';
 import { initChannels, setActiveChannelId } from '../store/channels';
+import { unsetAppError, setAppError, setConnectionState, enumConnectionState } from '../store/app';
 
-console.log('gon', gon);
+//console.log('gon', gon);
+export const UserContext = React.createContext({});
 
-if (process.env.NODE_ENV !== 'production') {
-  //localStorage.debug = 'chat:*';
-  //localStorage.debug = '*';
-}
-
-const rawUser = cookies.get('user') || '{}';
-let user = JSON.parse(rawUser);
-const username = user.username || faker.name.findName(); 
-const userId = user.userId || `${username}${Date.now()}`;
-user = { username, userId };
-cookies.set('user', JSON.stringify(user));
-
-const socket = io();
-const store = configureStore({
-  reducer: rootReducer,
-});
-
-socket.on('newMessage', (res) => {
-  const { data: { attributes } } = res;
-  if (attributes.userId !== user.userId) {
-    store.dispatch(addMsgSuccess(attributes));
+try {
+  if (process.env.NODE_ENV !== 'production') {
+    //localStorage.debug = 'chat:*';
+    //localStorage.debug = '*';
   }
-}); 
 
-socket.on('pong', (res) => {
-  console.log('PONG')
-  console.log(socket)
-  console.log(res)
-}); 
-socket.on('ping', (res) => {
-  console.log('PING')
-  console.log(res)
-}); 
-socket.on('connect_error', (res) => {
-  console.log('connect_error')
-  console.log(res)
-}); 
-socket.on('reconnect_attempt', (res) => {
-  console.log('reconnect_attempt')
-  console.log(res)
-}); 
-socket.on('connect', (res) => {
-  console.log('connect')
-  console.log(res)
-}); 
-socket.on('disconnect', (res) => {
-  console.log('disconnect')
-  console.log(res)
-}); 
+  const rawUser = cookies.get('user') || '{}';
+  let user = JSON.parse(rawUser);
+  const username = user.username || faker.name.findName(); 
+  const userId = user.userId || `${username}${Date.now()}`;
+  user = { username, userId };
+  cookies.set('user', JSON.stringify(user));
 
-store.dispatch(initMessages(gon.messages));
-store.dispatch(initChannels(gon.channels));
-store.dispatch(setActiveChannelId(gon.currentChannelId));
+  const socket = io();
+  const store = configureStore({
+    reducer: rootReducer,
+  });
+  socket.on('connect', () => {
+    store.dispatch(setConnectionState(enumConnectionState('connect')));
+    store.dispatch(unsetAppError('connectErr'));
+  }); 
 
-const UserContext = React.createContext({});
+  socket.on('disconnect', () => {
+    store.dispatch(setConnectionState(enumConnectionState('disconnect')));
+    store.dispatch(setAppError({ id: 'connectErr', text: 'Server connection error' }));
+  }); 
 
-ReactDOM.render(
-  <Provider store={store}>
-    <UserContext.Provider value={user}>
-      <App />
-    </UserContext.Provider>
-  </Provider>,
-  document.getElementById('chat')
-);
+  socket.on('newMessage', (res) => {
+    const { data: { attributes } } = res;
+    if (attributes.userId !== user.userId) {
+      store.dispatch(addMsgSuccess(attributes));
+    }
+  }); 
 
-export { UserContext };
+  store.dispatch(initMessages(gon.messages));
+  store.dispatch(initChannels(gon.channels));
+  store.dispatch(setActiveChannelId(gon.currentChannelId));
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <UserContext.Provider value={user}>
+        <App />
+      </UserContext.Provider>
+    </Provider>,
+    document.getElementById('chat')
+  );
+
+} catch(err) {
+  console.log(err)
+}
