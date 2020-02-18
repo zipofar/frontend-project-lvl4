@@ -8,9 +8,11 @@ html(lang="en")
   body
     .ClientContainer
       .ClientContainer-Header
-        nav.navbar.navbar-expand-lg.navbar-light.bg-faded
-          a.navbar-brand(href="/") Chat
-          button.navbar-toggler(data-toggle="collapse" data-target="#navbarSupportedContent")
-            span.navbar-toggler-icon
+        .AppHeader-Left
+          nav.navbar.navbar-expand-lg.navbar-light.bg-faded
+            a.Navbar-Title.navbar-brand(href="/") Chat
+            button.navbar-toggler(data-toggle="collapse" data-target="#navbarSupportedContent")
+              span.navbar-toggler-icon
+        .AppHeader-Right
       #chat.ClientContainer-Main
     script(src=assetPath('main.js'))

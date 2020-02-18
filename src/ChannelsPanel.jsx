@@ -7,16 +7,18 @@ import { setActiveChannelId } from '../store/channels';
 
 const ChannelsPanel = () => {
   const channels = useSelector(({ channels }) => channels);
+  const { activeChannelId } = channels;
   const dispatch = useDispatch();
   return(
-    <div>
+    <div className="ChannelPanel-ChannelsNames">
       {channels.list.map(({ id, name }) => (
         <Button
           block
           key={id}
+          variant={activeChannelId === id ? 'primary' : 'light'}
           className={cn({
             "ChannelPanel-ChannelName": true,
-            "ChannelPanel-ChannelName_active": channels.activeChannelId === id,
+            "ChannelPanel-ChannelName_active": activeChannelId === id,
           })}
           onClick={() => { dispatch(setActiveChannelId(id)) }}
         >

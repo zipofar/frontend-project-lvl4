@@ -1,3 +1,5 @@
+$primary: #46b193;
+
 @import '~bootstrap/scss/bootstrap';
 
 .ClientContainer {
@@ -7,6 +9,28 @@
 
 .ClientContainer-Header {
   height: 56px;
+  display: flex;
+}
+
+.AppHeader-Left {
+  width: 220px;
+  background: #4d394b;
+}
+
+.AppHeader-Right {
+  height: 100%;
+  width: calc(100% - 200px);
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.navbar-light .Navbar-Title {
+  color: rgba(255, 255, 255, .6);
+  font-weight: 600;
+}
+
+.navbar-light .Navbar-Title:hover,
+.navbar-light .Navbar-Title:focus {
+  color: rgba(255, 255, 255, 1);
 }
 
 .ClientContainer-Main {
@@ -31,8 +55,13 @@
 }
 
 .ChannelPanel-Title {
+  margin-left: 16px;
   font-weight: 600;
   color: #ffffff;
+}
+
+.ChannelPanel-ChannelsNames {
+  margin-top: 16px;
 }
 
 .ChannelPanel-ChannelName {
@@ -40,6 +69,10 @@
   color: #ffffff;
   background: transparent;
   border: transparent;
+}
+
+.ChannelPanel-ChannelName:hover {
+  background: rgba(255, 255, 255, .2);
 }
 
 .ChannelPanel-ChannelName_active {
