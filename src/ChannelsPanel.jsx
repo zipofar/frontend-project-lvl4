@@ -18,7 +18,6 @@ const ChannelsPanel = () => {
           variant={activeChannelId === id ? 'primary' : 'light'}
           className={cn({
             "ChannelPanel-ChannelName": true,
-            "ChannelPanel-ChannelName_active": activeChannelId === id,
           })}
           onClick={() => { dispatch(setActiveChannelId(id)) }}
         >

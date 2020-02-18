@@ -3,7 +3,7 @@ import axios from 'axios';
 import routes from '../src/routes';
 import { setupEnum } from '../src/utils';
 
-export const getStateLoadingMsg = setupEnum([
+export const enumStateLoadingMsg = setupEnum([
   'request',
   'success',
   'failed',
@@ -20,15 +20,15 @@ const msgSlice = createSlice({
     initMessages: (state, { payload }) => {
       state.messages = [ ...payload ];
     },
-    addMsgRequest: (state) => { state.loading = getStateLoadingMsg('request') },
+    addMsgRequest: (state) => { state.loading = enumStateLoadingMsg('request') },
     addMsgSuccess: (state, { payload }) => {
       state.messages.push({ ...payload });
       state.error = null;
-      state.loading = getStateLoadingMsg('success');
+      state.loading = enumStateLoadingMsg('success');
     },
     addMsgFailed: (state, { payload }) => {
       state.error = payload;
-      state.loading = getStateLoadingMsg('failed');
+      state.loading = enumStateLoadingMsg('failed');
     },
   },
 });

@@ -1,11 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { setupEnum } from '../src/utils';
+
+export const enumConnectionState = setupEnum([
+  'connect',
+  'disconnect',
+]);
 
 const appSlice = createSlice({
   name: 'app',
   initialState: {
+    connectionState: '',
     errors: [],
   },
   reducers: {
+    setConnectionState: (state, { payload }) => {
+      state.connectionState = payload;
+    },
     setAppError: (state, { payload }) => {
       state.errors.push(payload);
     },
@@ -19,5 +29,6 @@ const appSlice = createSlice({
 export const {
   setAppError,
   unsetAppError,
+  setConnectionState,
 } = appSlice.actions;
 export default appSlice.reducer;

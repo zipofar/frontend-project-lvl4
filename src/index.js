@@ -16,7 +16,12 @@ import App from './App';
 import rootReducer from '../store';
 import { initMessages, addMsgSuccess } from '../store/messages';
 import { initChannels, setActiveChannelId } from '../store/channels';
-import { unsetAppError, setAppError } from '../store/app';
+import {
+  unsetAppError,
+  setAppError,
+  setConnectionState,
+  enumConnectionState
+} from '../store/app';
 
 //console.log('gon', gon);
 export const UserContext = React.createContext({});
@@ -40,10 +45,12 @@ try {
   });
   socket.on('connect', () => {
     store.dispatch(unsetAppError('connectErr'));
+    store.dispatch(setConnectionState(enumConnectionState('connect')));
   }); 
 
   socket.on('disconnect', () => {
     store.dispatch(setAppError({ id: 'connectErr', text: 'Server connection error' }));
+    store.dispatch(setConnectionState(enumConnectionState('disconnect')));
   }); 
 
   socket.on('newMessage', (res) => {

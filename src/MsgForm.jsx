@@ -3,13 +3,16 @@ import { Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { sendMessage, getStateLoadingMsg } from '../store/messages';
+import { sendMessage, enumStateLoadingMsg } from '../store/messages';
+import { enumConnectionState } from '../store/app';
 import { UserContext } from './index';
 
 const MsgForm = (props) => {
   const dispatch = useDispatch();
   const stateMessageLoading = useSelector(({ msg: { loading } }) => loading);
-  const isMessageOnRequest = stateMessageLoading === getStateLoadingMsg('request');
+  const { connectionState } = useSelector(({ app }) => app);
+  const isDisconnect = connectionState === enumConnectionState('disconnect');
+  const isMessageOnRequest = stateMessageLoading === enumStateLoadingMsg('request');
   const { activeChannelId } = useSelector(({ channels }) => channels)
   const user = useContext(UserContext);
 
@@ -48,7 +51,7 @@ const MsgForm = (props) => {
               />
               <Button
                 type="submit"
-                disabled={isMessageOnRequest || errors.message}
+                disabled={isMessageOnRequest || errors.message || isDisconnect}
               >
                 Send
               </Button>
