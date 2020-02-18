@@ -60,6 +60,14 @@ module.exports = {
           { loader: 'sass-loader', options: { sourceMap: isDevelopment } },
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ],
   },
 };

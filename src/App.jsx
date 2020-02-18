@@ -11,7 +11,6 @@ export default () => {
   return (
     <React.Fragment>
       <div className="ClientContainer-Left ChannelsPanel ChannelsPanel_color_primary">
-        <span className="ChannelPanel-Title">Channels</span>
         <ChannelsPanel />
       </div>
       <div className="ClientContainer-Right ChatWorkspace">
