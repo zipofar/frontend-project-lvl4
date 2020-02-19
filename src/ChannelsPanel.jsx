@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import cn from 'classnames';
 
 import { setActiveChannelId } from '../store/channels';
+import { setModalState, enumModalState } from '../store/app';
 
 const ChannelsPanel = () => {
   const channels = useSelector(({ channels }) => channels);
@@ -16,30 +16,34 @@ const ChannelsPanel = () => {
         <div className="ChannelPanel-ChannelsActions">
           <button
             className="ChannelName-ActionBtn ChannelName-ActionBtn_type_add"
-            onClick={(e) => {e.preventDefault()}}
+            onClick={() => { dispatch(setModalState(enumModalState('open'))) }}
           />
         </div>
       </div>
       <div className="ChannelPanel-ChannelsNames">
         {channels.list.map(({ id, name }) => (
-          <Button
-            block
+          <div
             key={id}
-            variant={activeChannelId === id ? 'primary' : 'light'}
             className={cn({
               "ChannelPanel-ChannelName": true,
             })}
             onClick={() => { dispatch(setActiveChannelId(id)) }}
           >
-            <span className="ChannelName-Text"># {name}</span>
-            <div className="ChannelName-Actions">
-              <button
-                className="ChannelName-ActionBtn ChannelName-ActionBtn_type_close"
-                onClick={(e) => {e.preventDefault()}}
-              />
-            </div>
-            
-          </Button>
+            <a
+              className={cn({
+                "ChannelName": true,
+                "ChannelName_active": activeChannelId === id,
+              })}
+            >
+              <span className="ChannelName-Text"># {name}</span>
+              <div className="ChannelName-Actions">
+                <button
+                  className="ChannelName-ActionBtn ChannelName-ActionBtn_type_close"
+                  onClick={(e) => {e.preventDefault()}}
+                />
+              </div>
+            </a>
+          </div>
         ))}
       </div>
     </React.Fragment>

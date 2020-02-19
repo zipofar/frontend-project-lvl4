@@ -58,7 +58,7 @@ $light: #4d394b;
 .ChannelPanel-ChannelsHeader {
   display: flex;
   justify-content: space-between;
-  padding: 0 14px;
+  padding: 0 16px;
 }
 
 .ChannelPanel-Title {
@@ -70,13 +70,26 @@ $light: #4d394b;
   margin-top: 16px;
 }
 
-.ChannelPanel-ChannelName {
+.ChannelName {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding: 0 16px;
   font-weight: 600;
+  line-height: 26px;
+  cursor: pointer;
+}
+
+.ChannelName:hover {
+  background: rgba(0, 0, 0, .2);
+}
+
+.ChannelName_active,
+.ChannelName_active:hover {
+  background-color: $primary;
+}
+
+.ChannelName-Text {
   color: #ffffff;
-  text-align: left;
 }
 
 .ChannelName-ActionBtn {

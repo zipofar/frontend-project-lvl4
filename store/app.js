@@ -6,13 +6,22 @@ export const enumConnectionState = setupEnum([
   'disconnect',
 ]);
 
+export const enumModalState = setupEnum([
+  'close',
+  'open',
+]);
+
 const appSlice = createSlice({
   name: 'app',
   initialState: {
     connectionState: '',
+    modalState: enumModalState('close'),
     errors: [],
   },
   reducers: {
+    setModalState: (state, { payload }) => {
+      state.modalState = payload;
+    },
     setConnectionState: (state, { payload }) => {
       state.connectionState = payload;
     },
@@ -30,5 +39,6 @@ export const {
   setAppError,
   unsetAppError,
   setConnectionState,
+  setModalState,
 } = appSlice.actions;
 export default appSlice.reducer;
