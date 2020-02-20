@@ -15,7 +15,11 @@ import '../assets/application.scss';
 import App from './App';
 import rootReducer from '../store';
 import { initMessages, addMsgSuccess } from '../store/messages';
-import { initChannels, setActiveChannelId } from '../store/channels';
+import {
+  initChannels,
+  setActiveChannelId,
+  addChannelSuccess
+} from '../store/channels';
 import {
   unsetAppError,
   setAppError,
@@ -57,6 +61,15 @@ try {
     const { data: { attributes } } = res;
     if (attributes.userId !== user.userId) {
       store.dispatch(addMsgSuccess(attributes));
+    }
+  }); 
+
+  socket.on('newChannel', (res) => {
+    const { data: { attributes } } = res;
+    const channels = store.getState().channels.list;
+    const channelsIds = channels.map(({ id }) => id);
+    if (!channelsIds.includes(attributes.id)) {
+      store.dispatch(addChannelSuccess(attributes));
     }
   }); 
 
