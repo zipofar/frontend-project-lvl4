@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { createChannel } from '../store/channels';
 
-export default () => {
+export default ({ onHide }) => {
   const dispatch = useDispatch();
   return(
     <Formik
@@ -17,8 +17,11 @@ export default () => {
         return errors;
       }}
       onSubmit={({ channelName }, opts) => {
-        dispatch(createChannel({ name: channelName }));
-        opts.resetForm();
+        const data = { name: channelName };
+        const actions = {
+          onHideModal: onHide,
+        }
+        dispatch(createChannel(data, actions));
       }}
     >
       {({
@@ -30,11 +33,10 @@ export default () => {
       }) => (
         <Form onSubmit={handleSubmit}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Create New Channel</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group>
-              <Form.Label>Name new channel</Form.Label>
               <Form.Control
                 placeholder="Enter channel name"
                 name="channelName"
@@ -42,9 +44,6 @@ export default () => {
                 onBlur={handleBlur}
                 value={values.message}
               />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
             </Form.Group>
             <div
               style={{ display: 'block', height: '1rem' }}
@@ -54,7 +53,7 @@ export default () => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary">
+            <Button variant="secondary" onClick={onHide}>
               Close
             </Button>
             <Button type="submit" variant="primary">

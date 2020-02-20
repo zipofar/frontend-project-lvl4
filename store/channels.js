@@ -24,11 +24,23 @@ const channelsSlice = createSlice({
     setActiveChannelId: (state, { payload }) => {
       state.activeChannelId = payload;
     },
+    removeChannelSuccess: (state, { payload }) => {
+      const filteredChannels = state.list
+        .filter(({ id }) => id !== payload);
+      state.list = filteredChannels;
+      state.loading = enumStateLoadingChannel('success');
+    },
     addChannelRequest: (state) => { state.loading = enumStateLoadingChannel('request') },
     addChannelSuccess: (state, { payload }) => {
-      state.list.push({ ...payload });
-      state.error = null;
-      state.loading = enumStateLoadingChannel('success');
+      const { id: newChannelId } = payload;
+      const issetChannel = state.list
+        .filter(({ id }) => id === newChannelId)
+        .length > 0;
+      if (!issetChannel) {
+        state.list.push({ ...payload });
+        state.error = null;
+        state.loading = enumStateLoadingChannel('success');
+      }
     },
     addChannelFailed: (state, { payload }) => {
       state.error = payload;
@@ -43,11 +55,12 @@ export const {
   addChannelRequest,
   addChannelSuccess,
   addChannelFailed,
+  removeChannelSuccess,
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;
 
-export const createChannel = (data) => async dispatch => {
+export const createChannel = (data, { onHideModal }) => async dispatch => {
   dispatch(addChannelRequest());
   let res;
   try {
@@ -61,4 +74,18 @@ export const createChannel = (data) => async dispatch => {
   }
   const { data: { data: { attributes } } } = res;
   dispatch(addChannelSuccess(attributes));
-}
+  onHideModal();
+};
+
+export const removeChannel = (channelId, { onHideModal }) => async dispatch => {
+  dispatch(addChannelRequest());
+  let res;
+  try {
+    res = await axios.delete(routes.channelPath(channelId));
+  } catch(err) {
+    dispatch(addChannelFailed(err.toString()));
+  }
+  const { data: { data: { id } } } = res;
+  dispatch(removeChannelSuccess(id));
+  onHideModal();
+};

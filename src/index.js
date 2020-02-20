@@ -66,11 +66,7 @@ try {
 
   socket.on('newChannel', (res) => {
     const { data: { attributes } } = res;
-    const channels = store.getState().channels.list;
-    const channelsIds = channels.map(({ id }) => id);
-    if (!channelsIds.includes(attributes.id)) {
-      store.dispatch(addChannelSuccess(attributes));
-    }
+    store.dispatch(addChannelSuccess(attributes));
   }); 
 
   store.dispatch(initMessages(gon.messages));

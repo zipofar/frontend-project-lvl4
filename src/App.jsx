@@ -9,9 +9,13 @@ import WarningPanel from './WarningPanel';
 import ModalChannel from './ModalChannel';
 import { enumModalState, setModalState } from '../store/app';
 
+const handleClose = (dispatch) => () => {
+  dispatch(setModalState(enumModalState('close')));
+};
+
 export default () => {
-  const dispatch = useDispatch();
   const { app } = useSelector((state) => state);
+  const dispatch = useDispatch();
   const appErrors = app.errors;
   const showModal = app.modalState === enumModalState('open');
   return (
@@ -24,8 +28,8 @@ export default () => {
         <MsgForm />
         <WarningPanel errors={appErrors} />
       </div>
-      <Modal show={showModal} onHide={() => { dispatch(setModalState(enumModalState('close'))) }}>
-        <ModalChannel />
+      <Modal show={showModal} onHide={handleClose(dispatch)}>
+        <ModalChannel onHide={handleClose(dispatch)} />
       </Modal>
     </React.Fragment>
   )

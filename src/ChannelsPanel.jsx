@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import cn from 'classnames';
 
-import { setActiveChannelId } from '../store/channels';
+import { setActiveChannelId, removeChannel } from '../store/channels';
 import { setModalState, enumModalState } from '../store/app';
 
 const ChannelsPanel = () => {
@@ -21,7 +21,7 @@ const ChannelsPanel = () => {
         </div>
       </div>
       <div className="ChannelPanel-ChannelsNames">
-        {channels.list.map(({ id, name }) => (
+        {channels.list.map(({ id, name, removable }) => (
           <div
             key={id}
             className={cn({
@@ -36,12 +36,15 @@ const ChannelsPanel = () => {
               })}
             >
               <span className="ChannelName-Text"># {name}</span>
-              <div className="ChannelName-Actions">
-                <button
-                  className="ChannelName-ActionBtn ChannelName-ActionBtn_type_close"
-                  onClick={(e) => {e.preventDefault()}}
-                />
-              </div>
+              { removable
+                ? <div className="ChannelName-Actions">
+                  <button
+                    className="ChannelName-ActionBtn ChannelName-ActionBtn_type_close"
+                    onClick={(e) => { dispatch(removeChannel(id))} }
+                  />
+                </div>
+                : null
+              }
             </a>
           </div>
         ))}
