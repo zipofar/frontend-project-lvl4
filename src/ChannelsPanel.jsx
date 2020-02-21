@@ -13,7 +13,8 @@ const handleCreate = (dispatch) => () => {
   }));
 };
 
-const handleEdit = (dispatch, id) => () => {
+const handleEdit = (dispatch, id) => (e) => {
+  e.stopPropagation();
   dispatch(setModal({
     modalState: enumModalState('open'),
     name: 'editChannel',
@@ -21,7 +22,8 @@ const handleEdit = (dispatch, id) => () => {
   }));
 };
 
-const handleRemove = (dispatch, id) => () => {
+const handleRemove = (dispatch, id) => (e) => {
+  e.stopPropagation();
   dispatch(setModal({
     modalState: enumModalState('open'),
     name: 'removeChannel',

@@ -79,8 +79,16 @@ $light: #4d394b;
   cursor: pointer;
 }
 
+.ChannelName-Actions {
+  display: none;
+}
+
 .ChannelName:hover {
   background: rgba(0, 0, 0, .2);
+}
+
+.ChannelName:hover > .ChannelName-Actions {
+  display: block;
 }
 
 .ChannelName_active,
