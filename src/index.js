@@ -18,7 +18,8 @@ import { initMessages, addMsgSuccess } from '../store/messages';
 import {
   initChannels,
   setActiveChannelId,
-  addChannelSuccess
+  addChannelSuccess,
+  removeChannelSuccess
 } from '../store/channels';
 import {
   unsetAppError,
@@ -67,6 +68,11 @@ try {
   socket.on('newChannel', (res) => {
     const { data: { attributes } } = res;
     store.dispatch(addChannelSuccess(attributes));
+  }); 
+
+  socket.on('removeChannel', (res) => {
+    const { data: { id } } = res;
+    store.dispatch(removeChannelSuccess(id));
   }); 
 
   store.dispatch(initMessages(gon.messages));

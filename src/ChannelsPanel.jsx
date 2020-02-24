@@ -3,7 +3,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import cn from 'classnames';
 
 import { setActiveChannelId, removeChannel } from '../store/channels';
-import { setModalState, enumModalState } from '../store/app';
+import { setModal, setModalState, enumModalState } from '../store/app';
+
+const handleCreate = (dispatch) => () => {
+  dispatch(setModal({
+    modalState: enumModalState('open'),
+    name: 'createChannel',
+    data: {},
+  }));
+};
+
+const handleRemove = (dispatch, id) => () => {
+  dispatch(setModal({
+    modalState: enumModalState('open'),
+    name: 'removeChannel',
+    data: { channelId: id },
+  }));
+};
 
 const ChannelsPanel = () => {
   const channels = useSelector(({ channels }) => channels);
@@ -16,7 +32,7 @@ const ChannelsPanel = () => {
         <div className="ChannelPanel-ChannelsActions">
           <button
             className="ChannelName-ActionBtn ChannelName-ActionBtn_type_add"
-            onClick={() => { dispatch(setModalState(enumModalState('open'))) }}
+            onClick={handleCreate(dispatch)}
           />
         </div>
       </div>
@@ -40,7 +56,7 @@ const ChannelsPanel = () => {
                 ? <div className="ChannelName-Actions">
                   <button
                     className="ChannelName-ActionBtn ChannelName-ActionBtn_type_close"
-                    onClick={(e) => { dispatch(removeChannel(id))} }
+                    onClick={handleRemove(dispatch, id)}
                   />
                 </div>
                 : null

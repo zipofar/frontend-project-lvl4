@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../src/routes';
 import { setupEnum } from '../src/utils';
+import { removeMsgSuccess } from './messages';
 
 export const enumStateLoadingChannel = setupEnum([
   'request',
@@ -77,7 +78,7 @@ export const createChannel = (data, { onHideModal }) => async dispatch => {
   onHideModal();
 };
 
-export const removeChannel = (channelId, { onHideModal }) => async dispatch => {
+export const removeChannel = ({ channelId, channelsIds }, { onHideModal }) => async dispatch => {
   dispatch(addChannelRequest());
   let res;
   try {
@@ -85,7 +86,9 @@ export const removeChannel = (channelId, { onHideModal }) => async dispatch => {
   } catch(err) {
     dispatch(addChannelFailed(err.toString()));
   }
-  const { data: { data: { id } } } = res;
-  dispatch(removeChannelSuccess(id));
+  dispatch(removeChannelSuccess(channelId));
+  dispatch(removeMsgSuccess(channelId));
+  const idFirstChannel = channelsIds[0];
+  dispatch(setActiveChannelId(idFirstChannel));
   onHideModal();
 };

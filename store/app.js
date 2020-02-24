@@ -16,6 +16,8 @@ const appSlice = createSlice({
   initialState: {
     connectionState: '',
     modalState: enumModalState('close'),
+    modalName: '',
+    modalData: {},
     errors: [],
   },
   reducers: {
@@ -32,6 +34,12 @@ const appSlice = createSlice({
       const filteredErrors = state.errors.filter((e) => (e.id !== payload));
       state.errors = filteredErrors;
     },
+    setModal: (state, { payload }) => {
+      const { modalState, name, data } = payload;
+      state.modalName = name;
+      state.modalData = data;
+      state.modalState = modalState;
+    }
   },
 });
 
@@ -40,5 +48,6 @@ export const {
   unsetAppError,
   setConnectionState,
   setModalState,
+  setModal,
 } = appSlice.actions;
 export default appSlice.reducer;

@@ -9,15 +9,16 @@ import WarningPanel from './WarningPanel';
 import ModalChannel from './ModalChannel';
 import { enumModalState, setModalState } from '../store/app';
 
-const handleClose = (dispatch) => () => {
+const handleCloseModal = (dispatch) => () => {
   dispatch(setModalState(enumModalState('close')));
 };
 
 export default () => {
-  const { app } = useSelector((state) => state);
+  const { app, channels } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const appErrors = app.errors;
-  const showModal = app.modalState === enumModalState('open');
+  const { errors: appErrors, modalState, modalName, modalData } = app;
+  const showModal = modalState === enumModalState('open');
+  const channelsIds = channels.list.map(({ id }) => id);
   return (
     <React.Fragment>
       <div className="ClientContainer-Left ChannelsPanel ChannelsPanel_color_primary">
@@ -28,8 +29,12 @@ export default () => {
         <MsgForm />
         <WarningPanel errors={appErrors} />
       </div>
-      <Modal show={showModal} onHide={handleClose(dispatch)}>
-        <ModalChannel onHide={handleClose(dispatch)} />
+      <Modal show={showModal} onHide={handleCloseModal(dispatch)}>
+        <ModalChannel
+          modalData={{ ...modalData, channelsIds }}
+          modalName={modalName}
+          onHide={handleCloseModal(dispatch)}
+        />
       </Modal>
     </React.Fragment>
   )

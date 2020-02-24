@@ -30,6 +30,9 @@ const msgSlice = createSlice({
       state.error = payload;
       state.loading = enumStateLoadingMsg('failed');
     },
+    removeMsgSuccess: (state, { payload }) => {
+      state.messages = state.messages.filter(({ channelId }) => channelId !== payload);
+    },
   },
 });
 
@@ -37,7 +40,8 @@ export const {
   initMessages,
   addMsgRequest,
   addMsgSuccess,
-  addMsgFailed
+  addMsgFailed,
+  removeMsgSuccess
 } = msgSlice.actions;
 
 export const sendMessage = (data, channdelId) => async dispatch => {
