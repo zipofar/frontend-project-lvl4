@@ -19,6 +19,7 @@ import {
   initChannels,
   setActiveChannelId,
   addChannelSuccess,
+  updateChannelSuccess,
   removeChannelSuccess
 } from '../store/channels';
 import {
@@ -28,13 +29,11 @@ import {
   enumConnectionState
 } from '../store/app';
 
-//console.log('gon', gon);
 export const UserContext = React.createContext({});
 
 try {
   if (process.env.NODE_ENV !== 'production') {
-    //localStorage.debug = 'chat:*';
-    //localStorage.debug = '*';
+    localStorage.debug = 'chat:*';
   }
 
   const rawUser = cookies.get('user') || '{}';
@@ -68,6 +67,11 @@ try {
   socket.on('newChannel', (res) => {
     const { data: { attributes } } = res;
     store.dispatch(addChannelSuccess(attributes));
+  }); 
+
+  socket.on('renameChannel', (res) => {
+    const { data: { attributes } } = res;
+    store.dispatch(updateChannelSuccess(attributes));
   }); 
 
   socket.on('removeChannel', (res) => {

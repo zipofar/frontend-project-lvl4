@@ -107,8 +107,12 @@ $light: #4d394b;
   opacity: .8;
 }
 
-.ChannelName-ActionBtn_type_close {
+.ChannelName-ActionBtn_type_remove {
   background-image: url('./close-2x.png');
+}
+
+.ChannelName-ActionBtn_type_edit {
+  background-image: url('./pencil-2x.png');
 }
 
 .ChannelName-ActionBtn_type_add {

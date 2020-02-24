@@ -43,6 +43,13 @@ const channelsSlice = createSlice({
         state.loading = enumStateLoadingChannel('success');
       }
     },
+    updateChannelSuccess: (state, { payload }) => {
+      const { id: currentChannelId } = payload;
+        state.list = state.list
+        .map(channel => (channel.id === currentChannelId ? payload : channel));
+        state.error = null;
+        state.loading = enumStateLoadingChannel('success');
+    },
     addChannelFailed: (state, { payload }) => {
       state.error = payload;
       state.loading = enumStateLoadingChannel('failed');
@@ -57,6 +64,7 @@ export const {
   addChannelSuccess,
   addChannelFailed,
   removeChannelSuccess,
+  updateChannelSuccess,
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;
@@ -78,7 +86,24 @@ export const createChannel = (data, { onHideModal }) => async dispatch => {
   onHideModal();
 };
 
-export const removeChannel = ({ channelId, channelsIds }, { onHideModal }) => async dispatch => {
+export const editChannel = (data, { onHideModal }) => async dispatch => {
+  dispatch(addChannelRequest());
+  let res;
+  try {
+    res = await axios.patch(routes.channelPath(data.channelId), {
+      data:{
+        attributes: { name: data.name },
+      }
+    });
+  } catch(err) {
+    dispatch(addChannelFailed(err.toString()));
+  }
+  const { data: { data: { attributes } } } = res;
+  dispatch(updateChannelSuccess(attributes));
+  onHideModal();
+};
+
+export const removeChannel = ({ channelId, channelsList }, { onHideModal }) => async dispatch => {
   dispatch(addChannelRequest());
   let res;
   try {
@@ -88,7 +113,7 @@ export const removeChannel = ({ channelId, channelsIds }, { onHideModal }) => as
   }
   dispatch(removeChannelSuccess(channelId));
   dispatch(removeMsgSuccess(channelId));
-  const idFirstChannel = channelsIds[0];
+  const idFirstChannel = channelsList[0].id;
   dispatch(setActiveChannelId(idFirstChannel));
   onHideModal();
 };

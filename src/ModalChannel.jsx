@@ -1,16 +1,16 @@
 import React from 'react';
 import { Form, Modal, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
-import { useDispatch } from 'react-redux';
-import { createChannel, removeChannel } from '../store/channels';
+import { useDispatch, useSelector } from 'react-redux';
+import { createChannel, editChannel, removeChannel } from '../store/channels';
 
-const getModalType = (modalName, modalData, dispatch) => {
+const getModalType = (modalName) => {
   switch(modalName) {
     case 'removeChannel':
       return {
         title: 'Remove Channel',
-        handleSubmit: (_, actions) => {
-          dispatch(removeChannel(modalData, actions));
+        handleSubmit: (data, actions, dispatch) => {
+          dispatch(removeChannel(data, actions));
         },
         textSubmitBtn: 'Remove',
         type: 'remove',
@@ -18,7 +18,7 @@ const getModalType = (modalName, modalData, dispatch) => {
     case 'createChannel':
       return {
         title: 'Create Channel',
-        handleSubmit: (data, actions) => {
+        handleSubmit: (data, actions, dispatch) => {
           dispatch(createChannel(data, actions));
         },
         textSubmitBtn: 'Save',
@@ -27,8 +27,8 @@ const getModalType = (modalName, modalData, dispatch) => {
     case 'editChannel':
       return {
         title: 'Edit Channel',
-        handleSubmit: (data, actions) => {
-          dispatch(createChannel(data, actions));
+        handleSubmit: (data, actions, dispatch) => {
+          dispatch(editChannel(data, actions));
         },
         textSubmitBtn: 'Save',
         type: 'edit',
@@ -41,7 +41,7 @@ const getModalType = (modalName, modalData, dispatch) => {
 const validate = (values) => {
   const errors = {};
   if (!values.channelName) {
-    errors.message = 'Required channel name';
+    errors.channelName = 'Required channel name';
   }
   return errors;
 };
@@ -53,17 +53,21 @@ export default ({ modalName, modalData, onHide }) => {
     handleSubmit,
     textSubmitBtn,
     type
-  } = getModalType(modalName, modalData, dispatch);
+  } = getModalType(modalName);
+  const currentChannel = modalData.channelsList
+    .filter(({ id }) => id === modalData.channelId);
+  const channelName = currentChannel.length > 0 ? currentChannel[0].name : '';
+
   return(
     <Formik
-      initialValues={{ channelName: '' }}
+      initialValues={{ channelName }}
       validate={type === 'remove' ? null : validate}
       onSubmit={({ channelName }, opts) => {
-        const data = { name: channelName };
+        const data = { name: channelName, ...modalData };
         const actions = {
           onHideModal: onHide,
         }
-        handleSubmit(data, actions);
+        handleSubmit(data, actions, dispatch);
       }}
     >
       {({
@@ -87,14 +91,14 @@ export default ({ modalName, modalData, onHide }) => {
                       name="channelName"
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.message}
+                      value={values.channelName}
                     />
                   </Form.Group>
                   <div
                     style={{ display: 'block', height: '1rem' }}
                     className="invalid-feedback"
                   >
-                    {errors.message}
+                    {errors.channelName}
                   </div>
                 </React.Fragment>
             }

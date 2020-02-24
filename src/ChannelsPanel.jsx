@@ -13,6 +13,14 @@ const handleCreate = (dispatch) => () => {
   }));
 };
 
+const handleEdit = (dispatch, id) => () => {
+  dispatch(setModal({
+    modalState: enumModalState('open'),
+    name: 'editChannel',
+    data: { channelId: id },
+  }));
+};
+
 const handleRemove = (dispatch, id) => () => {
   dispatch(setModal({
     modalState: enumModalState('open'),
@@ -54,11 +62,15 @@ const ChannelsPanel = () => {
               <span className="ChannelName-Text"># {name}</span>
               { removable
                 ? <div className="ChannelName-Actions">
-                  <button
-                    className="ChannelName-ActionBtn ChannelName-ActionBtn_type_close"
-                    onClick={handleRemove(dispatch, id)}
-                  />
-                </div>
+                    <button
+                      className="ChannelName-ActionBtn ChannelName-ActionBtn_type_edit"
+                      onClick={handleEdit(dispatch, id)}
+                    />
+                    <button
+                      className="ChannelName-ActionBtn ChannelName-ActionBtn_type_remove"
+                      onClick={handleRemove(dispatch, id)}
+                    />
+                  </div>
                 : null
               }
             </a>

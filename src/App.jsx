@@ -18,7 +18,7 @@ export default () => {
   const dispatch = useDispatch();
   const { errors: appErrors, modalState, modalName, modalData } = app;
   const showModal = modalState === enumModalState('open');
-  const channelsIds = channels.list.map(({ id }) => id);
+  const channelsList = channels.list;
   return (
     <React.Fragment>
       <div className="ClientContainer-Left ChannelsPanel ChannelsPanel_color_primary">
@@ -31,7 +31,7 @@ export default () => {
       </div>
       <Modal show={showModal} onHide={handleCloseModal(dispatch)}>
         <ModalChannel
-          modalData={{ ...modalData, channelsIds }}
+          modalData={{ ...modalData, channelsList }}
           modalName={modalName}
           onHide={handleCloseModal(dispatch)}
         />
