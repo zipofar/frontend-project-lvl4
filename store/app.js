@@ -11,6 +11,12 @@ export const enumModalState = setupEnum([
   'open',
 ]);
 
+export const enumModalName = setupEnum([
+  'createChannel',
+  'editChannel',
+  'removeChannel',
+]);
+
 const appSlice = createSlice({
   name: 'app',
   initialState: {

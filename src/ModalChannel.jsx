@@ -3,10 +3,11 @@ import { Form, Modal, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { createChannel, editChannel, removeChannel } from '../store/channels';
+import { enumModalName } from '../store/app';
 
 const getModalType = (modalName) => {
   switch(modalName) {
-    case 'removeChannel':
+    case enumModalName('removeChannel'):
       return {
         title: 'Remove Channel',
         handleSubmit: (data, actions, dispatch) => {
@@ -15,7 +16,7 @@ const getModalType = (modalName) => {
         textSubmitBtn: 'Remove',
         type: 'remove',
       }
-    case 'createChannel':
+    case enumModalName('createChannel'):
       return {
         title: 'Create Channel',
         handleSubmit: (data, actions, dispatch) => {
@@ -24,7 +25,7 @@ const getModalType = (modalName) => {
         textSubmitBtn: 'Save',
         type: 'create',
       }
-    case 'editChannel':
+    case enumModalName('editChannel'):
       return {
         title: 'Edit Channel',
         handleSubmit: (data, actions, dispatch) => {

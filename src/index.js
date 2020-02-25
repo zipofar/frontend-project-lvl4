@@ -28,6 +28,7 @@ import {
   setConnectionState,
   enumConnectionState
 } from '../store/app';
+import { removeMsgSuccess } from '../store/messages';
 
 export const UserContext = React.createContext({});
 
@@ -77,6 +78,7 @@ try {
   socket.on('removeChannel', (res) => {
     const { data: { id } } = res;
     store.dispatch(removeChannelSuccess(id));
+    store.dispatch(removeMsgSuccess(id));
   }); 
 
   store.dispatch(initMessages(gon.messages));
