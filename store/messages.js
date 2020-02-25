@@ -20,15 +20,20 @@ const msgSlice = createSlice({
     initMessages: (state, { payload }) => {
       state.messages = [ ...payload ];
     },
-    addMsgRequest: (state) => { state.loading = enumStateLoadingMsg('request') },
-    addMsgSuccess: (state, { payload }) => {
-      state.messages.push({ ...payload });
+    actionMsgRequest: (state) => {
       state.error = null;
-      state.loading = enumStateLoadingMsg('success');
+      state.loading = enumStateLoadingMsg('request')
     },
-    addMsgFailed: (state, { payload }) => {
+    actionMsgSuccess: (state) => {
+      state.error = null;
+      state.loading = enumStateLoadingMsg('success')
+    },
+    actionMsgFailed: (state, { payload }) => {
       state.error = payload;
       state.loading = enumStateLoadingMsg('failed');
+    },
+    addMsgSuccess: (state, { payload }) => {
+      state.messages.push({ ...payload });
     },
     removeMsgSuccess: (state, { payload }) => {
       state.messages = state.messages.filter(({ channelId }) => channelId !== payload);
@@ -38,14 +43,15 @@ const msgSlice = createSlice({
 
 export const {
   initMessages,
-  addMsgRequest,
+  actionMsgRequest,
+  actionMsgSuccess,
+  actionMsgFailed,
   addMsgSuccess,
-  addMsgFailed,
   removeMsgSuccess
 } = msgSlice.actions;
 
 export const sendMessage = (data, channdelId) => async dispatch => {
-  dispatch(addMsgRequest());
+  dispatch(actionMsgRequest());
   let res;
   try {
     res = await axios.post(routes.channelMessagesPath(channdelId), {
@@ -53,11 +59,13 @@ export const sendMessage = (data, channdelId) => async dispatch => {
         attributes: { ...data },
       }
     });
+
+    const { data: { data: { attributes } } } = res;
+    dispatch(actionMsgSuccess());
+    dispatch(addMsgSuccess(attributes));
   } catch(err) {
-    dispatch(addMsgFailed(err.toString()));
+    dispatch(actionMsgFailed(err.toString()));
   }
-  const { data: { data: { attributes } } } = res;
-  dispatch(addMsgSuccess(attributes));
 }
 
 export default msgSlice.reducer;

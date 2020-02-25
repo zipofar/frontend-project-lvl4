@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../src/routes';
 import { setupEnum } from '../src/utils';
-import { removeMsgSuccess } from './messages';
 
 export const enumStateLoadingChannel = setupEnum([
   'request',
@@ -25,28 +24,29 @@ const channelsSlice = createSlice({
     setActiveChannelId: (state, { payload }) => {
       state.activeChannelId = payload;
     },
-    removeChannelSuccess: (state, { payload }) => {
-      const filteredChannels = state.list
-        .filter(({ id }) => id !== payload);
-      state.list = filteredChannels;
-      state.loading = enumStateLoadingChannel('success');
-    },
-    actionChannelRequest: (state) => { state.loading = enumStateLoadingChannel('request') },
-    addChannelSuccess: (state, { payload }) => {
-      state.list.push({ ...payload });
+    actionChannelRequest: (state) => {
       state.error = null;
-      state.loading = enumStateLoadingChannel('success');
+      state.loading = enumStateLoadingChannel('request')
     },
-    updateChannelSuccess: (state, { payload }) => {
-      const { id: currentChannelId } = payload;
-        state.list = state.list
-        .map(channel => (channel.id === currentChannelId ? payload : channel));
-        state.error = null;
-        state.loading = enumStateLoadingChannel('success');
+    actionChannelSuccess: (state) => {
+      state.error = null;
+      state.loading = enumStateLoadingChannel('success')
     },
     actionChannelFailed: (state, { payload }) => {
       state.error = payload;
       state.loading = enumStateLoadingChannel('failed');
+    },
+    addChannelSuccess: (state, { payload }) => {
+      state.list.push({ ...payload });
+    },
+    updateChannelSuccess: (state, { payload }) => {
+      const { id: currentChannelId } = payload;
+        state.list = state.list.map(channel => (
+          channel.id === currentChannelId ? payload : channel
+        ));
+    },
+    removeChannelSuccess: (state, { payload }) => {
+      state.list = state.list.filter(({ id }) => id !== payload);
     },
   },
 });
@@ -55,10 +55,11 @@ export const {
   initChannels,
   setActiveChannelId,
   actionChannelRequest,
-  addChannelSuccess,
+  actionChannelSuccess,
   actionChannelFailed,
-  removeChannelSuccess,
+  addChannelSuccess,
   updateChannelSuccess,
+  removeChannelSuccess,
 } = channelsSlice.actions;
 
 export default channelsSlice.reducer;
@@ -72,9 +73,12 @@ export const createChannel = (data, { onHideModal }) => async dispatch => {
         attributes: { ...data },
       }
     });
+
     onHideModal();
+    dispatch(actionChannelSuccess());
   } catch(err) {
     dispatch(actionChannelFailed(err.toString()));
+    console.log(err);
   }
 };
 
@@ -87,9 +91,12 @@ export const editChannel = (data, { onHideModal }) => async dispatch => {
         attributes: { name: data.name },
       }
     });
+
     onHideModal();
+    dispatch(actionChannelSuccess());
   } catch(err) {
     dispatch(actionChannelFailed(err.toString()));
+    console.log(err);
   }
 };
 
@@ -99,9 +106,11 @@ export const removeChannel = ({ channelId, channelsList }, { onHideModal }) => a
   try {
     res = await axios.delete(routes.channelPath(channelId));
     const idFirstChannel = channelsList[0].id;
-    dispatch(setActiveChannelId(idFirstChannel));
     onHideModal();
+    dispatch(actionChannelSuccess());
+    dispatch(setActiveChannelId(idFirstChannel));
   } catch(err) {
     dispatch(actionChannelFailed(err.toString()));
+    console.log(err);
   }
 };

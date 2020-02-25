@@ -1,8 +1,8 @@
 import React from 'react';
-import { Form, Modal, Button } from 'react-bootstrap';
+import { Form, Modal, Button, Alert } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { createChannel, editChannel, removeChannel } from '../store/channels';
+import { createChannel, editChannel, removeChannel, enumStateLoadingChannel } from '../store/channels';
 import { enumModalName } from '../store/app';
 
 const getModalType = (modalName) => {
@@ -49,6 +49,8 @@ const validate = (values) => {
 
 export default ({ modalName, modalData, onHide }) => {
   const dispatch = useDispatch();
+  const { channels } = useSelector(state => state);
+  const isProcessRequest = channels.loading === enumStateLoadingChannel('request');
   const {
     title,
     handleSubmit,
@@ -83,7 +85,8 @@ export default ({ modalName, modalData, onHide }) => {
             <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {type === 'remove'
+            {
+              type === 'remove'
               ? <span>Are you shure want delete channel?</span>
               : <React.Fragment>
                   <Form.Group>
@@ -99,7 +102,7 @@ export default ({ modalName, modalData, onHide }) => {
                     style={{ display: 'block', height: '1rem' }}
                     className="invalid-feedback"
                   >
-                    {errors.channelName}
+                    {errors.channelName || channels.error}
                   </div>
                 </React.Fragment>
             }
@@ -108,7 +111,7 @@ export default ({ modalName, modalData, onHide }) => {
             <Button variant="secondary" onClick={onHide}>
               Close
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" disabled={isProcessRequest} >
               {textSubmitBtn}
             </Button>
           </Modal.Footer>

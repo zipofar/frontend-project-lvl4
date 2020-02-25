@@ -7,13 +7,14 @@ import { sendMessage, enumStateLoadingMsg } from '../store/messages';
 import { enumConnectionState } from '../store/app';
 import { UserContext } from './index';
 
-const MsgForm = (props) => {
+const MsgForm = () => {
   const dispatch = useDispatch();
-  const stateMessageLoading = useSelector(({ msg: { loading } }) => loading);
-  const { connectionState } = useSelector(({ app }) => app);
+  const { app, msg, channels } = useSelector(state => state);
+  const stateMessageLoading = msg.loading;
+  const { connectionState } = app;
   const isDisconnect = connectionState === enumConnectionState('disconnect');
-  const isMessageOnRequest = stateMessageLoading === enumStateLoadingMsg('request');
-  const { activeChannelId } = useSelector(({ channels }) => channels)
+  const isProcessRequest = stateMessageLoading === enumStateLoadingMsg('request');
+  const { activeChannelId } = channels;
   const user = useContext(UserContext);
 
   return(
@@ -51,7 +52,7 @@ const MsgForm = (props) => {
               />
               <Button
                 type="submit"
-                disabled={isMessageOnRequest || errors.message || isDisconnect}
+                disabled={isProcessRequest || errors.message || isDisconnect}
               >
                 Send
               </Button>
@@ -60,7 +61,7 @@ const MsgForm = (props) => {
               style={{ display: 'block', height: '1rem' }}
               className="invalid-feedback"
             >
-              {errors.message}
+              {errors.message || msg.error}
             </div>
           </form>
         )}
