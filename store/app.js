@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { setupEnum } from '../src/utils';
+import utils from '../src/utils';
+
+/* eslint no-param-reassign: 0 */
+
+const { setupEnum } = utils;
 
 export const enumConnectionState = setupEnum([
   'connect',
@@ -45,7 +49,7 @@ const appSlice = createSlice({
       state.modalName = name;
       state.modalData = data;
       state.modalState = modalState;
-    }
+    },
   },
 });
 
@@ -56,4 +60,5 @@ export const {
   setModalState,
   setModal,
 } = appSlice.actions;
+
 export default appSlice.reducer;

@@ -9,7 +9,7 @@ import { UserContext } from './index';
 
 const MsgForm = () => {
   const dispatch = useDispatch();
-  const { app, msg, channels } = useSelector(state => state);
+  const { app, msg, channels } = useSelector((state) => state);
   const stateMessageLoading = msg.loading;
   const { connectionState } = app;
   const isDisconnect = connectionState === enumConnectionState('disconnect');
@@ -17,11 +17,11 @@ const MsgForm = () => {
   const { activeChannelId } = channels;
   const user = useContext(UserContext);
 
-  return(
+  return (
     <div className="ChatWorkspace-Footer">
       <Formik
         initialValues={{ message: '' }}
-        validate={values => {
+        validate={(values) => {
           const errors = {};
           if (!values.message) {
             errors.message = 'Required message text';
@@ -67,7 +67,7 @@ const MsgForm = () => {
         )}
       </Formik>
     </div>
-  )
+  );
 };
 
 export default MsgForm;

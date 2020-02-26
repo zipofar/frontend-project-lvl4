@@ -1,12 +1,21 @@
 import React from 'react';
-import { Form, Modal, Button, Alert } from 'react-bootstrap';
+import {
+  Form,
+  Modal,
+  Button,
+} from 'react-bootstrap';
 import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { createChannel, editChannel, removeChannel, enumStateLoadingChannel } from '../store/channels';
+import {
+  createChannel,
+  editChannel,
+  removeChannel,
+  enumStateLoadingChannel,
+} from '../store/channels';
 import { enumModalName } from '../store/app';
 
 const getModalType = (modalName) => {
-  switch(modalName) {
+  switch (modalName) {
     case enumModalName('removeChannel'):
       return {
         title: 'Remove Channel',
@@ -15,7 +24,7 @@ const getModalType = (modalName) => {
         },
         textSubmitBtn: 'Remove',
         type: 'remove',
-      }
+      };
     case enumModalName('createChannel'):
       return {
         title: 'Create Channel',
@@ -24,7 +33,7 @@ const getModalType = (modalName) => {
         },
         textSubmitBtn: 'Save',
         type: 'create',
-      }
+      };
     case enumModalName('editChannel'):
       return {
         title: 'Edit Channel',
@@ -33,7 +42,7 @@ const getModalType = (modalName) => {
         },
         textSubmitBtn: 'Save',
         type: 'edit',
-      }
+      };
     default:
       throw new Error(`Modal name ${modalName} does not exists`);
   }
@@ -49,27 +58,27 @@ const validate = (values) => {
 
 export default ({ modalName, modalData, onHide }) => {
   const dispatch = useDispatch();
-  const { channels } = useSelector(state => state);
+  const { channels } = useSelector((state) => state);
   const isProcessRequest = channels.loading === enumStateLoadingChannel('request');
   const {
     title,
     handleSubmit,
     textSubmitBtn,
-    type
+    type,
   } = getModalType(modalName);
   const currentChannel = modalData.channelsList
     .filter(({ id }) => id === modalData.channelId);
   const channelName = currentChannel.length > 0 ? currentChannel[0].name : '';
 
-  return(
+  return (
     <Formik
       initialValues={{ channelName }}
       validate={type === 'remove' ? null : validate}
-      onSubmit={({ channelName }, opts) => {
-        const data = { name: channelName, ...modalData };
+      onSubmit={(values) => {
+        const data = { name: values.channelName, ...modalData };
         const actions = {
           onHideModal: onHide,
-        }
+        };
         handleSubmit(data, actions, dispatch);
       }}
     >
@@ -88,7 +97,7 @@ export default ({ modalName, modalData, onHide }) => {
             {
               type === 'remove'
               ? <span>Are you shure want delete channel?</span>
-              : <React.Fragment>
+              : <>
                   <Form.Group>
                     <Form.Control
                       placeholder="Enter channel name"
@@ -104,14 +113,14 @@ export default ({ modalName, modalData, onHide }) => {
                   >
                     {errors.channelName || channels.error}
                   </div>
-                </React.Fragment>
+                </>
             }
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={onHide}>
               Close
             </Button>
-            <Button type="submit" variant="primary" disabled={isProcessRequest} >
+            <Button type="submit" variant="primary" disabled={isProcessRequest}>
               {textSubmitBtn}
             </Button>
           </Modal.Footer>

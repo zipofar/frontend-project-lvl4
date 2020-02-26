@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../src/routes';
-import { setupEnum } from '../src/utils';
+import utils from '../src/utils';
+
+/* eslint no-param-reassign: 0 */
+
+const { setupEnum } = utils;
 
 export const enumStateLoadingMsg = setupEnum([
   'request',
@@ -18,15 +22,15 @@ const msgSlice = createSlice({
   },
   reducers: {
     initMessages: (state, { payload }) => {
-      state.messages = [ ...payload ];
+      state.messages = [...payload];
     },
     actionMsgRequest: (state) => {
       state.error = null;
-      state.loading = enumStateLoadingMsg('request')
+      state.loading = enumStateLoadingMsg('request');
     },
     actionMsgSuccess: (state) => {
       state.error = null;
-      state.loading = enumStateLoadingMsg('success')
+      state.loading = enumStateLoadingMsg('success');
     },
     actionMsgFailed: (state, { payload }) => {
       state.error = payload;
@@ -47,25 +51,25 @@ export const {
   actionMsgSuccess,
   actionMsgFailed,
   addMsgSuccess,
-  removeMsgSuccess
+  removeMsgSuccess,
 } = msgSlice.actions;
 
-export const sendMessage = (data, channdelId) => async dispatch => {
+export const sendMessage = (data, channdelId) => async (dispatch) => {
   dispatch(actionMsgRequest());
   let res;
   try {
     res = await axios.post(routes.channelMessagesPath(channdelId), {
-      data:{
+      data: {
         attributes: { ...data },
-      }
+      },
     });
 
     const { data: { data: { attributes } } } = res;
     dispatch(actionMsgSuccess());
     dispatch(addMsgSuccess(attributes));
-  } catch(err) {
+  } catch (err) {
     dispatch(actionMsgFailed(err.toString()));
   }
-}
+};
 
 export default msgSlice.reducer;

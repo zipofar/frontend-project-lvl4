@@ -16,11 +16,16 @@ const handleCloseModal = (dispatch) => () => {
 export default () => {
   const { app, channels } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const { errors: appErrors, modalState, modalName, modalData } = app;
+  const {
+    errors: appErrors,
+    modalState,
+    modalName,
+    modalData,
+  } = app;
   const showModal = modalState === enumModalState('open');
   const channelsList = channels.list;
   return (
-    <React.Fragment>
+    <>
       <div className="ClientContainer-Left ChannelsPanel ChannelsPanel_color_primary">
         <ChannelsPanel />
       </div>
@@ -36,6 +41,6 @@ export default () => {
           onHide={handleCloseModal(dispatch)}
         />
       </Modal>
-    </React.Fragment>
-  )
-}
+    </>
+  );
+};

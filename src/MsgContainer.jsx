@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
-const MsgContainer =  () => {
+const MsgContainer = () => {
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
-  }
+    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
   const { messages } = useSelector(({ msg }) => msg);
-  const { activeChannelId } = useSelector(({ channels }) => channels)
-  const messagesByChannel = messages.filter((m) => (m.channelId === activeChannelId))
+  const { activeChannelId } = useSelector(({ channels }) => channels);
+  const messagesByChannel = messages.filter((m) => (m.channelId === activeChannelId));
 
   useEffect(scrollToBottom);
   return (
@@ -21,7 +21,7 @@ const MsgContainer =  () => {
       ))}
       <div ref={messagesEndRef} className="MessageBlock-UtilEndMessageBlock" />
     </div>
-  )
-}
+  );
+};
 
 export default MsgContainer;

@@ -14,21 +14,24 @@ import io from 'socket.io-client';
 import '../assets/application.scss';
 import App from './App';
 import rootReducer from '../store';
-import { initMessages, addMsgSuccess } from '../store/messages';
+import {
+  initMessages,
+  addMsgSuccess,
+  removeMsgSuccess,
+} from '../store/messages';
 import {
   initChannels,
   setActiveChannelId,
   addChannelSuccess,
   updateChannelSuccess,
-  removeChannelSuccess
+  removeChannelSuccess,
 } from '../store/channels';
 import {
   unsetAppError,
   setAppError,
   setConnectionState,
-  enumConnectionState
+  enumConnectionState,
 } from '../store/app';
-import { removeMsgSuccess } from '../store/messages';
 
 export const UserContext = React.createContext({});
 
@@ -39,7 +42,7 @@ try {
 
   const rawUser = cookies.get('user') || '{}';
   let user = JSON.parse(rawUser);
-  const username = user.username || faker.name.findName(); 
+  const username = user.username || faker.name.findName();
   const userId = user.userId || `${username}${Date.now()}`;
   user = { username, userId };
   cookies.set('user', JSON.stringify(user));
@@ -51,35 +54,35 @@ try {
   socket.on('connect', () => {
     store.dispatch(unsetAppError('connectErr'));
     store.dispatch(setConnectionState(enumConnectionState('connect')));
-  }); 
+  });
 
   socket.on('disconnect', () => {
     store.dispatch(setAppError({ id: 'connectErr', text: 'Server connection error' }));
     store.dispatch(setConnectionState(enumConnectionState('disconnect')));
-  }); 
+  });
 
   socket.on('newMessage', (res) => {
     const { data: { attributes } } = res;
     if (attributes.userId !== user.userId) {
       store.dispatch(addMsgSuccess(attributes));
     }
-  }); 
+  });
 
   socket.on('newChannel', (res) => {
     const { data: { attributes } } = res;
     store.dispatch(addChannelSuccess(attributes));
-  }); 
+  });
 
   socket.on('renameChannel', (res) => {
     const { data: { attributes } } = res;
     store.dispatch(updateChannelSuccess(attributes));
-  }); 
+  });
 
   socket.on('removeChannel', (res) => {
     const { data: { id } } = res;
     store.dispatch(removeChannelSuccess(id));
     store.dispatch(removeMsgSuccess(id));
-  }); 
+  });
 
   store.dispatch(initMessages(gon.messages));
   store.dispatch(initChannels(gon.channels));
@@ -91,9 +94,8 @@ try {
         <App />
       </UserContext.Provider>
     </Provider>,
-    document.getElementById('chat')
+    document.getElementById('chat'),
   );
-
-} catch(err) {
-  console.log(err)
+} catch (err) {
+  console.log(err);
 }
