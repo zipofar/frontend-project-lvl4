@@ -19,7 +19,7 @@ const getModalType = (modalName) => {
     case enumModalName('removeChannel'):
       return {
         title: 'Remove Channel',
-        handleSubmit: (data, actions, dispatch) => {
+        handleSave: (data, actions, dispatch) => {
           dispatch(removeChannel(data, actions));
         },
         textSubmitBtn: 'Remove',
@@ -28,7 +28,7 @@ const getModalType = (modalName) => {
     case enumModalName('createChannel'):
       return {
         title: 'Create Channel',
-        handleSubmit: (data, actions, dispatch) => {
+        handleSave: (data, actions, dispatch) => {
           dispatch(createChannel(data, actions));
         },
         textSubmitBtn: 'Save',
@@ -37,7 +37,7 @@ const getModalType = (modalName) => {
     case enumModalName('editChannel'):
       return {
         title: 'Edit Channel',
-        handleSubmit: (data, actions, dispatch) => {
+        handleSave: (data, actions, dispatch) => {
           dispatch(editChannel(data, actions));
         },
         textSubmitBtn: 'Save',
@@ -56,13 +56,39 @@ const validate = (values) => {
   return errors;
 };
 
+const renderInputGroup = ({
+  handleChange,
+  handleBlur,
+  values,
+  errors,
+  channels,
+}) => (
+  <>
+    <Form.Group>
+      <Form.Control
+        placeholder="Enter channel name"
+        name="channelName"
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.channelName}
+      />
+    </Form.Group>
+    <div
+      style={{ display: 'block', height: '1rem' }}
+      className="invalid-feedback"
+    >
+      {errors.channelName || channels.error}
+    </div>
+  </>
+);
+
 export default ({ modalName, modalData, onHide }) => {
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state);
   const isProcessRequest = channels.loading === enumStateLoadingChannel('request');
   const {
     title,
-    handleSubmit,
+    handleSave,
     textSubmitBtn,
     type,
   } = getModalType(modalName);
@@ -79,7 +105,7 @@ export default ({ modalName, modalData, onHide }) => {
         const actions = {
           onHideModal: onHide,
         };
-        handleSubmit(data, actions, dispatch);
+        handleSave(data, actions, dispatch);
       }}
     >
       {({
@@ -96,24 +122,14 @@ export default ({ modalName, modalData, onHide }) => {
           <Modal.Body>
             {
               type === 'remove'
-              ? <span>Are you shure want delete channel?</span>
-              : <>
-                  <Form.Group>
-                    <Form.Control
-                      placeholder="Enter channel name"
-                      name="channelName"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.channelName}
-                    />
-                  </Form.Group>
-                  <div
-                    style={{ display: 'block', height: '1rem' }}
-                    className="invalid-feedback"
-                  >
-                    {errors.channelName || channels.error}
-                  </div>
-                </>
+                ? <span>Are you shure want delete channel?</span>
+                : renderInputGroup({
+                  handleChange,
+                  handleBlur,
+                  values,
+                  errors,
+                  channels,
+                })
             }
           </Modal.Body>
           <Modal.Footer>

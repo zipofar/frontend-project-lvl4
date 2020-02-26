@@ -1,5 +1,6 @@
 // @ts-check
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import path from 'path';
 import buildApp from '../server';
 
@@ -73,4 +74,3 @@ test('post /channels/:id/messages', async () => {
 
   expect(JSON.parse(response.payload)).toMatchObject(expected);
 });
-

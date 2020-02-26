@@ -1,4 +1,5 @@
 // @ts-check
+/* eslint react/jsx-filename-extension:0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -32,8 +33,7 @@ import {
   setConnectionState,
   enumConnectionState,
 } from '../store/app';
-
-export const UserContext = React.createContext({});
+import UserContext from '../store/userContext';
 
 try {
   if (process.env.NODE_ENV !== 'production') {
@@ -97,5 +97,5 @@ try {
     document.getElementById('chat'),
   );
 } catch (err) {
-  console.log(err);
+  console.log(err); // eslint-disable-line no-console
 }

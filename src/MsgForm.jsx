@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { sendMessage, enumStateLoadingMsg } from '../store/messages';
 import { enumConnectionState } from '../store/app';
-import { UserContext } from './index';
+import UserContext from '../store/userContext';
 
 const MsgForm = () => {
   const dispatch = useDispatch();

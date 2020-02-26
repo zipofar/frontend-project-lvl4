@@ -3,6 +3,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 import path from 'path';
 import Pug from 'pug';
 import socket from 'socket.io';
@@ -16,8 +17,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const appPath = path.join(__dirname, '..');
 const isDevelopment = !isProduction;
 
+// eslint-disable-next-line no-unused-vars
 const setUpViews = (app, options) => {
-  const domain = isDevelopment ? `http://localhost:8080` : '';
+  const domain = isDevelopment ? 'http://localhost:8080' : '';
   app.register(pointOfView, {
     engine: {
       pug: Pug,

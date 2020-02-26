@@ -2,8 +2,11 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import cn from 'classnames';
 
-import { setActiveChannelId, removeChannel } from '../store/channels';
-import { setModal, setModalState, enumModalState } from '../store/app';
+import { setActiveChannelId } from '../store/channels';
+import { setModal, enumModalState } from '../store/app';
+
+/* eslint jsx-a11y/control-has-associated-label: 0 */
+/* eslint jsx-a11y/anchor-is-valid: 0 */
 
 const handleCreate = (dispatch) => () => {
   dispatch(setModal({
@@ -31,16 +34,38 @@ const handleRemove = (dispatch, id) => (e) => {
   }));
 };
 
+const handlePressEnterOnChannelName = (id, dispatch) => ({ keyCode }) => {
+  if (keyCode === 13) {
+    dispatch(setActiveChannelId(id));
+  }
+};
+
+const showChannelActions = (id, dispatch) => (
+  <div className="ChannelName-Actions">
+    <button
+      type="button"
+      className="ChannelName-ActionBtn ChannelName-ActionBtn_type_edit"
+      onClick={handleEdit(dispatch, id)}
+    />
+    <button
+      type="button"
+      className="ChannelName-ActionBtn ChannelName-ActionBtn_type_remove"
+      onClick={handleRemove(dispatch, id)}
+    />
+  </div>
+);
+
 const ChannelsPanel = () => {
-  const channels = useSelector(({ channels }) => channels);
+  const { channels } = useSelector((state) => state);
   const { activeChannelId } = channels;
   const dispatch = useDispatch();
-  return(
-    <React.Fragment>
+  return (
+    <>
       <div className="ChannelPanel-ChannelsHeader">
         <span className="ChannelPanel-Title">Channels</span>
         <div className="ChannelPanel-ChannelsActions">
           <button
+            type="button"
             className="ChannelName-ActionBtn ChannelName-ActionBtn_type_add"
             onClick={handleCreate(dispatch)}
           />
@@ -51,36 +76,29 @@ const ChannelsPanel = () => {
           <div
             key={id}
             className={cn({
-              "ChannelPanel-ChannelName": true,
+              'ChannelPanel-ChannelName': true,
             })}
-            onClick={() => { dispatch(setActiveChannelId(id)) }}
           >
             <a
+              role="button"
+              tabIndex={0}
               className={cn({
-                "ChannelName": true,
-                "ChannelName_active": activeChannelId === id,
+                ChannelName: true,
+                ChannelName_active: activeChannelId === id,
               })}
+              onKeyUp={handlePressEnterOnChannelName(id, dispatch)}
+              onClick={() => { dispatch(setActiveChannelId(id)); }}
             >
-              <span className="ChannelName-Text"># {name}</span>
-              { removable
-                ? <div className="ChannelName-Actions">
-                    <button
-                      className="ChannelName-ActionBtn ChannelName-ActionBtn_type_edit"
-                      onClick={handleEdit(dispatch, id)}
-                    />
-                    <button
-                      className="ChannelName-ActionBtn ChannelName-ActionBtn_type_remove"
-                      onClick={handleRemove(dispatch, id)}
-                    />
-                  </div>
-                : null
-              }
+              <span className="ChannelName-Text">
+                {`# ${name}`}
+              </span>
+              {removable && showChannelActions(id, dispatch)}
             </a>
           </div>
         ))}
       </div>
-    </React.Fragment>
+    </>
   );
-}
+};
 
 export default ChannelsPanel;
