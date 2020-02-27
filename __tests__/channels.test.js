@@ -85,8 +85,7 @@ test('patch /channels/:id', async () => {
       { id: 100, name: 'custom', removable: true },
     ],
   };
-
-  const app = buildApp(state);
+  const app = buildApp({ state });
 
   const payload = {
     data: {

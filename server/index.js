@@ -46,7 +46,7 @@ export default (options) => {
 
   const io = socket(app.server);
 
-  addRoutes(app, io, options.state || {});
+  addRoutes(app, io, options?.state || {});
 
   return app;
 };
