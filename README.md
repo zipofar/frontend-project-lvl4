@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.com/zipofar/frontend-project-lvl4.svg?branch=master)](https://travis-ci.com/zipofar/frontend-project-lvl4)
 [![Maintainability](https://api.codeclimate.com/v1/badges/53b5f35a559ad0c9fb76/maintainability)](https://codeclimate.com/github/zipofar/frontend-project-lvl4/maintainability)
+![Node.js CI](https://github.com/zipofar/frontend-project-lvl4/workflows/Node.js%20CI/badge.svg)
+![Lint](https://github.com/zipofar/frontend-project-lvl4/workflows/Lint/badge.svg)
 
 ### Description
 
