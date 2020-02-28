@@ -57,7 +57,7 @@ const showChannelActions = (id, dispatch) => (
 );
 
 const ChannelsPanel = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { channels } = useSelector((state) => state);
   const { activeChannelId } = channels;
   const dispatch = useDispatch();

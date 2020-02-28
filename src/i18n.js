@@ -11,36 +11,19 @@ i18n
     resources: {
       en: {
         translation: {
-          'modal': {
-            'close': 'Close',
-            'confirmDeleteionChannel': 'Confirm deletion channel',
-            'removeChannel': 'Remove Channel',
-            'remove': 'Remove',
-            'save': 'Save',
-            'createChannel': 'Create Channel',
-            'editChannel': 'Edit Channel',
-            'requiredChannelName': 'Required channel name',
-            'lengthChannelName': 'Channel name is longer than {{maxLength}} symbols',
-            'enterChannelName': 'Enter channel name',
+          modal: {
+            close: 'Close',
+            confirmDeleteionChannel: 'Confirm deletion channel',
+            removeChannel: 'Remove Channel',
+            remove: 'Remove',
+            save: 'Save',
+            createChannel: 'Create Channel',
+            editChannel: 'Edit Channel',
+            requiredChannelName: 'Required channel name',
+            lengthChannelName: 'Channel name is longer than {{maxLength}} symbols',
+            enterChannelName: 'Enter channel name',
           },
-          'nameChannelsPanel': 'Channels',
-        },
-      },
-      ru: {
-        translation: {
-          'modal': {
-            'close': 'Закрыть',
-            'confirmDeleteionChannel': 'Подтвердите удаление канала',
-            'removeChannel': 'Удалить канал',
-            'remove': 'Удалить',
-            'save': 'Сохранить',
-            'createChannel': 'Создать канал',
-            'editChannel': 'Изменить канал',
-            'requiredChannelName': 'Обязательно ввести имя канала',
-            'lengthChannelName': 'Длина имени канала превышает {{maxLength}} символов',
-            'enterChannelName': 'Введите имя канала',
-          },
-          'nameChannelsPanel': 'Каналы',
+          nameChannelsPanel: 'Channels',
         },
       },
     },

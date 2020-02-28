@@ -87,7 +87,7 @@ const renderInputGroup = ({
 );
 
 export default ({ modalName, modalData, onHide }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state);
   const isProcessRequest = channels.loading === enumStateLoadingChannel('request');
