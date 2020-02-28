@@ -141,7 +141,11 @@ export default ({ modalName, modalData, onHide }) => {
             <Button variant="secondary" onClick={onHide}>
               {t('modal.close')}
             </Button>
-            <Button type="submit" variant="primary" disabled={isProcessRequest}>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isProcessRequest || Object.keys(errors).length > 0}
+            >
               {textSubmitBtn}
             </Button>
           </Modal.Footer>
