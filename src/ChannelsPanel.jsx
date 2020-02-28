@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import cn from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { setActiveChannelId } from '../store/channels';
 import { setModal, enumModalState } from '../store/app';
@@ -56,13 +57,14 @@ const showChannelActions = (id, dispatch) => (
 );
 
 const ChannelsPanel = () => {
+  const { t, i18n } = useTranslation();
   const { channels } = useSelector((state) => state);
   const { activeChannelId } = channels;
   const dispatch = useDispatch();
   return (
     <>
       <div className="ChannelPanel-ChannelsHeader">
-        <span className="ChannelPanel-Title">Channels</span>
+        <span className="ChannelPanel-Title">{t('nameChannelsPanel')}</span>
         <div className="ChannelPanel-ChannelsActions">
           <button
             type="button"

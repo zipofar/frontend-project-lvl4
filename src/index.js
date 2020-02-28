@@ -34,6 +34,8 @@ import {
   enumConnectionState,
 } from '../store/app';
 import UserContext from '../store/userContext';
+import './i18n';
+
 
 try {
   if (process.env.NODE_ENV !== 'production') {

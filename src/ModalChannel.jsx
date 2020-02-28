@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Form,
   Modal,
@@ -14,33 +15,33 @@ import {
 } from '../store/channels';
 import { enumModalName } from '../store/app';
 
-const getModalType = (modalName) => {
+const getModalType = (modalName, { t }) => {
   switch (modalName) {
     case enumModalName('removeChannel'):
       return {
-        title: 'Remove Channel',
+        title: t('modal.removeChannel'),
         handleSave: (data, actions, dispatch) => {
           dispatch(removeChannel(data, actions));
         },
-        textSubmitBtn: 'Remove',
+        textSubmitBtn: t('modal.Remove'),
         type: 'remove',
       };
     case enumModalName('createChannel'):
       return {
-        title: 'Create Channel',
+        title: t('modal.createChannel'),
         handleSave: (data, actions, dispatch) => {
           dispatch(createChannel(data, actions));
         },
-        textSubmitBtn: 'Save',
+        textSubmitBtn: t('modal.save'),
         type: 'create',
       };
     case enumModalName('editChannel'):
       return {
-        title: 'Edit Channel',
+        title: t('modal.editChannel'),
         handleSave: (data, actions, dispatch) => {
           dispatch(editChannel(data, actions));
         },
-        textSubmitBtn: 'Save',
+        textSubmitBtn: t('modal.save'),
         type: 'edit',
       };
     default:
@@ -48,10 +49,13 @@ const getModalType = (modalName) => {
   }
 };
 
-const validate = (values) => {
+const validate = (t) => (values) => {
   const errors = {};
-  if (!values.channelName) {
-    errors.channelName = 'Required channel name';
+  if (!values.channelName.trim()) {
+    errors.channelName = t('modal.requiredChannelName');
+  }
+  if (values.channelName.length > 15) {
+    errors.channelName = t('modal.lengthChannelName', { maxLength: 15 });
   }
   return errors;
 };
@@ -62,11 +66,11 @@ const renderInputGroup = ({
   values,
   errors,
   channels,
-}) => (
+}, { t }) => (
   <>
     <Form.Group>
       <Form.Control
-        placeholder="Enter channel name"
+        placeholder={t('modal.enterChannelName')}
         name="channelName"
         onChange={handleChange}
         onBlur={handleBlur}
@@ -83,6 +87,7 @@ const renderInputGroup = ({
 );
 
 export default ({ modalName, modalData, onHide }) => {
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const { channels } = useSelector((state) => state);
   const isProcessRequest = channels.loading === enumStateLoadingChannel('request');
@@ -91,7 +96,7 @@ export default ({ modalName, modalData, onHide }) => {
     handleSave,
     textSubmitBtn,
     type,
-  } = getModalType(modalName);
+  } = getModalType(modalName, { t });
   const currentChannel = modalData.channelsList
     .filter(({ id }) => id === modalData.channelId);
   const channelName = currentChannel.length > 0 ? currentChannel[0].name : '';
@@ -99,7 +104,7 @@ export default ({ modalName, modalData, onHide }) => {
   return (
     <Formik
       initialValues={{ channelName }}
-      validate={type === 'remove' ? null : validate}
+      validate={type === 'remove' ? null : validate(t)}
       onSubmit={(values) => {
         const data = { name: values.channelName, ...modalData };
         const actions = {
@@ -122,19 +127,19 @@ export default ({ modalName, modalData, onHide }) => {
           <Modal.Body>
             {
               type === 'remove'
-                ? <span>Are you shure want delete channel?</span>
+                ? <span>{t('modal.confirmDeleteionChannel')}</span>
                 : renderInputGroup({
                   handleChange,
                   handleBlur,
                   values,
                   errors,
                   channels,
-                })
+                }, { t })
             }
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={onHide}>
-              Close
+              {t('modal.close')}
             </Button>
             <Button type="submit" variant="primary" disabled={isProcessRequest}>
               {textSubmitBtn}
