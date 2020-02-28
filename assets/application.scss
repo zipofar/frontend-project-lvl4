@@ -81,6 +81,7 @@ $light: #4d394b;
 
 .ChannelName-Actions {
   display: none;
+  align-items: center;
 }
 
 .ChannelName:hover {
@@ -88,7 +89,7 @@ $light: #4d394b;
 }
 
 .ChannelName:hover > .ChannelName-Actions {
-  display: block;
+  display: flex;
 }
 
 .ChannelName_active,
@@ -98,6 +99,9 @@ $light: #4d394b;
 
 .ChannelName-Text {
   color: #ffffff;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .ChannelName-ActionBtn {
