@@ -42,17 +42,30 @@ const handlePressEnterOnChannelName = (id, dispatch) => ({ keyCode }) => {
 };
 
 const showChannelActions = (id, dispatch) => (
-  <div className="ChannelName-Actions">
+  <div className="btn-group" role="group">
     <button
       type="button"
-      className="ChannelName-ActionBtn ChannelName-ActionBtn_type_edit"
-      onClick={handleEdit(dispatch, id)}
+      className="btn btn-secondary dropdown-toggle"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
     />
-    <button
-      type="button"
-      className="ChannelName-ActionBtn ChannelName-ActionBtn_type_remove"
-      onClick={handleRemove(dispatch, id)}
-    />
+    <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
+      <button
+        type="button"
+        className="btn btn-link dropdown-item"
+        onClick={handleEdit(dispatch, id)}
+      >
+        edit
+      </button>
+      <button
+        type="button"
+        className="btn btn-link dropdown-item"
+        onClick={handleRemove(dispatch, id)}
+      >
+        del
+      </button>
+    </div>
   </div>
 );
 
@@ -63,42 +76,35 @@ const ChannelsPanel = () => {
   const dispatch = useDispatch();
   return (
     <>
-      <div className="ChannelPanel-ChannelsHeader">
-        <span className="ChannelPanel-Title">{t('nameChannelsPanel')}</span>
-        <div className="ChannelPanel-ChannelsActions">
+      <div className="d-flex mb-2">
+        <span>{t('nameChannelsPanel')}</span>
           <button
-            type="button"
-            className="ChannelName-ActionBtn ChannelName-ActionBtn_type_add"
+            className="btn btn-link p-0 ml-auto"
             onClick={handleCreate(dispatch)}
-          />
-        </div>
-      </div>
-      <div className="ChannelPanel-ChannelsNames">
-        {channels.list.map(({ id, name, removable }) => (
-          <div
-            key={id}
-            className={cn({
-              'ChannelPanel-ChannelName': true,
-            })}
           >
-            <a
-              role="button"
-              tabIndex={0}
-              className={cn({
-                ChannelName: true,
-                ChannelName_active: activeChannelId === id,
-              })}
-              onKeyUp={handlePressEnterOnChannelName(id, dispatch)}
-              onClick={() => { dispatch(setActiveChannelId(id)); }}
-            >
-              <span className="ChannelName-Text">
-                {`# ${name}`}
-              </span>
-              {removable && showChannelActions(id, dispatch)}
-            </a>
-          </div>
-        ))}
+            +
+          </button>
       </div>
+      <ul className="nav flex-column nav-pills nav-fill">
+        {channels.list.map(({ id, name, removable }) => (
+          <li key={id} className="nav-item d-flex">
+            <div className="w-100 btn-group" role="group" aria-label="Button group with nested dropdown">
+              <button
+                type="button"
+                className={cn({
+                  'nav-link btn btn-block text-left': true,
+                  active: activeChannelId === id,
+                })}
+                onKeyUp={handlePressEnterOnChannelName(id, dispatch)}
+                onClick={() => { dispatch(setActiveChannelId(id)); }}
+              >
+                {name}
+              </button>
+              {removable && showChannelActions(id, dispatch)}
+            </div>
+          </li>
+        ))}
+      </ul>
     </>
   );
 };

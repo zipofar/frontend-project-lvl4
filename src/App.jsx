@@ -25,13 +25,15 @@ export default () => {
   const showModal = modalState === enumModalState('open');
   const channelsList = channels.list;
   return (
-    <>
-      <div className="ClientContainer-Left ChannelsPanel ChannelsPanel_color_primary">
+    <div className="row h-100 pb-3">
+      <div className="col-3 border-right">
         <ChannelsPanel />
       </div>
-      <div className="ClientContainer-Right ChatWorkspace">
-        <MsgContainer />
-        <MsgForm />
+      <div className="col h-100">
+        <div className="d-flex flex-column h-100">
+          <MsgContainer />
+          <MsgForm />
+        </div>
         <WarningPanel errors={appErrors} />
       </div>
       <Modal show={showModal} onHide={handleCloseModal(dispatch)}>
@@ -41,6 +43,6 @@ export default () => {
           onHide={handleCloseModal(dispatch)}
         />
       </Modal>
-    </>
+    </div>
   );
 };

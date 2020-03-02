@@ -12,14 +12,16 @@ const MsgContainer = () => {
 
   useEffect(scrollToBottom);
   return (
-    <div className="ChatWorkspace-Messages">
+    <div className="overflow-auto mb-3">
       {messagesByChannel.map((m) => (
-        <div className="MessageBlock" key={m.id}>
-          <div className="MessageBlock-Username">{m.username}</div>
-          <div className="MessageBlock-MsgText">{m.message}</div>
+        <div key={m.id}>
+          <div>
+            <b>{m.username}: </b>
+            {m.message}
+          </div>
         </div>
       ))}
-      <div ref={messagesEndRef} className="MessageBlock-UtilEndMessageBlock" />
+      <div ref={messagesEndRef} />
     </div>
   );
 };

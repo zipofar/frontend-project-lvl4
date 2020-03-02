@@ -18,7 +18,7 @@ const MsgForm = () => {
   const user = useContext(UserContext);
 
   return (
-    <div className="ChatWorkspace-Footer">
+    <div className="mt-auto">
       <Formik
         initialValues={{ message: '' }}
         validate={(values) => {
@@ -50,12 +50,6 @@ const MsgForm = () => {
                 value={values.message}
                 className="form-control"
               />
-              <Button
-                type="submit"
-                disabled={isProcessRequest || errors.message || isDisconnect}
-              >
-                Send
-              </Button>
             </div>
             <div
               style={{ display: 'block', height: '1rem' }}
