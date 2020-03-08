@@ -16,7 +16,9 @@ const MsgContainer = () => {
       {messagesByChannel.map((m) => (
         <div key={m.id}>
           <div>
-            <b>{m.username}: </b>
+            <b>
+              {`${m.username}: `}
+            </b>
             {m.message}
           </div>
         </div>

@@ -1,7 +1,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
+import {
+  Button,
+  ButtonGroup,
+  DropdownButton,
+  Dropdown,
+} from 'react-bootstrap';
 
 import { setActiveChannelId } from '../store/channels';
 import { setModal, enumModalState } from '../store/app';
@@ -42,31 +47,20 @@ const handlePressEnterOnChannelName = (id, dispatch) => ({ keyCode }) => {
 };
 
 const showChannelActions = (id, dispatch) => (
-  <div className="btn-group" role="group">
-    <button
-      type="button"
-      className="btn btn-secondary dropdown-toggle"
-      data-toggle="dropdown"
-      aria-haspopup="true"
-      aria-expanded="false"
-    />
-    <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      <button
-        type="button"
-        className="btn btn-link dropdown-item"
-        onClick={handleEdit(dispatch, id)}
-      >
-        edit
-      </button>
-      <button
-        type="button"
-        className="btn btn-link dropdown-item"
-        onClick={handleRemove(dispatch, id)}
-      >
-        del
-      </button>
-    </div>
-  </div>
+  <DropdownButton as={ButtonGroup}>
+    <Dropdown.Item
+      eventKey="1"
+      onClick={handleEdit(dispatch, id)}
+    >
+      Edit
+    </Dropdown.Item>
+    <Dropdown.Item
+      eventKey="2"
+      onClick={handleRemove(dispatch, id)}
+    >
+      Delete
+    </Dropdown.Item>
+  </DropdownButton>
 );
 
 const ChannelsPanel = () => {
@@ -78,30 +72,28 @@ const ChannelsPanel = () => {
     <>
       <div className="d-flex mb-2">
         <span>{t('nameChannelsPanel')}</span>
-          <button
-            className="btn btn-link p-0 ml-auto"
-            onClick={handleCreate(dispatch)}
-          >
-            +
-          </button>
+        <Button
+          variant="link"
+          className="p-0 ml-auto"
+          onClick={handleCreate(dispatch)}
+        >
+          +
+        </Button>
       </div>
       <ul className="nav flex-column nav-pills nav-fill">
         {channels.list.map(({ id, name, removable }) => (
           <li key={id} className="nav-item d-flex">
-            <div className="w-100 btn-group" role="group" aria-label="Button group with nested dropdown">
-              <button
-                type="button"
-                className={cn({
-                  'nav-link btn btn-block text-left': true,
-                  active: activeChannelId === id,
-                })}
+            <ButtonGroup className="w-100">
+              <Button
+                variant={activeChannelId === id ? 'primary' : 'light'}
+                className="text-left"
                 onKeyUp={handlePressEnterOnChannelName(id, dispatch)}
                 onClick={() => { dispatch(setActiveChannelId(id)); }}
               >
                 {name}
-              </button>
-              {removable && showChannelActions(id, dispatch)}
-            </div>
+              </Button>
+              {removable && activeChannelId === id ? showChannelActions(id, dispatch) : null}
+            </ButtonGroup>
           </li>
         ))}
       </ul>
