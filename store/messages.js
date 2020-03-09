@@ -54,7 +54,7 @@ export const {
   removeMsgSuccess,
 } = msgSlice.actions;
 
-export const sendMessage = (data, channdelId) => async (dispatch) => {
+export const sendMessage = (data, channdelId, { resetForm }) => async (dispatch) => {
   dispatch(actionMsgRequest());
   let res;
   try {
@@ -67,6 +67,7 @@ export const sendMessage = (data, channdelId) => async (dispatch) => {
     const { data: { data: { attributes } } } = res;
     dispatch(actionMsgSuccess());
     dispatch(addMsgSuccess(attributes));
+    resetForm();
   } catch (err) {
     dispatch(actionMsgFailed(err.toString()));
   }
