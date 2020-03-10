@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 
@@ -9,11 +9,11 @@ import UserContext from '../store/userContext';
 const MsgForm = () => {
   const dispatch = useDispatch();
   const { app, msg, channels } = useSelector((state) => state);
-  const stateMessageLoading = msg.loading;
   const { connectionState } = app;
   const isDisconnect = connectionState === enumConnectionState('disconnect');
   const { activeChannelId } = channels;
   const user = useContext(UserContext);
+  const inputEl = useRef(null);
   const formik = useFormik({
     initialValues: {
       message: '',
@@ -29,6 +29,7 @@ const MsgForm = () => {
       await dispatch(
         sendMessage({ message, ...user }, activeChannelId, { resetForm })
       );
+      inputEl.current.focus();
     },
   });
 
@@ -37,6 +38,8 @@ const MsgForm = () => {
       <form onSubmit={formik.handleSubmit}>
         <div className="Form-Group">
           <input
+            autoFocus={true}
+            ref={inputEl}
             type="input"
             name="message"
             onChange={formik.handleChange}

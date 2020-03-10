@@ -47,7 +47,7 @@ const handlePressEnterOnChannelName = (id, dispatch) => ({ keyCode }) => {
 };
 
 const showChannelActions = (id, dispatch) => (
-  <DropdownButton as={ButtonGroup}>
+  <DropdownButton as={ButtonGroup} title="">
     <Dropdown.Item
       eventKey="1"
       onClick={handleEdit(dispatch, id)}

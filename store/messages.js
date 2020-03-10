@@ -1,24 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../src/routes';
-import utils from '../src/utils';
 
 /* eslint no-param-reassign: 0 */
-
-const { setupEnum } = utils;
-
-export const enumStateLoadingMsg = setupEnum([
-  'request',
-  'success',
-  'failed',
-]);
 
 const msgSlice = createSlice({
   name: 'msg',
   initialState: {
     messages: [],
     error: null,
-    loading: '',
   },
   reducers: {
     initMessages: (state, { payload }) => {
@@ -26,15 +16,12 @@ const msgSlice = createSlice({
     },
     actionMsgRequest: (state) => {
       state.error = null;
-      state.loading = enumStateLoadingMsg('request');
     },
     actionMsgSuccess: (state) => {
       state.error = null;
-      state.loading = enumStateLoadingMsg('success');
     },
     actionMsgFailed: (state, { payload }) => {
       state.error = payload;
-      state.loading = enumStateLoadingMsg('failed');
     },
     addMsgSuccess: (state, { payload }) => {
       state.messages.push({ ...payload });
