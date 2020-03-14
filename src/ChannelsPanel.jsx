@@ -9,7 +9,7 @@ import {
 } from 'react-bootstrap';
 
 import { setActiveChannelId } from '../store/channels';
-import { setModal, enumModalState } from '../store/app';
+import { setModal, enumModalState, enumModalName } from '../store/app';
 
 /* eslint jsx-a11y/control-has-associated-label: 0 */
 /* eslint jsx-a11y/anchor-is-valid: 0 */
@@ -17,13 +17,12 @@ import { setModal, enumModalState } from '../store/app';
 const handleCreate = (dispatch) => () => {
   dispatch(setModal({
     modalState: enumModalState('open'),
-    name: 'createChannel',
+    name: enumModalName('createChannel'),
     data: {},
   }));
 };
 
-const handleEdit = (dispatch, id) => (e) => {
-  e.stopPropagation();
+const handleEdit = (dispatch, id) => () => {
   dispatch(setModal({
     modalState: enumModalState('open'),
     name: 'editChannel',
@@ -31,8 +30,7 @@ const handleEdit = (dispatch, id) => (e) => {
   }));
 };
 
-const handleRemove = (dispatch, id) => (e) => {
-  e.stopPropagation();
+const handleRemove = (dispatch, id) => () => {
   dispatch(setModal({
     modalState: enumModalState('open'),
     name: 'removeChannel',

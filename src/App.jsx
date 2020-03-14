@@ -1,29 +1,38 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Modal } from 'react-bootstrap';
 
 import MsgForm from './MsgForm';
 import MsgContainer from './MsgContainer';
 import ChannelsPanel from './ChannelsPanel';
 import WarningPanel from './WarningPanel';
-import ModalChannel from './ModalChannel';
-import { enumModalState, setModalState } from '../store/app';
+import { enumModalState, setModal } from '../store/app';
+import getModalForChannel from './modals/channels';
 
 const handleCloseModal = (dispatch) => () => {
-  dispatch(setModalState(enumModalState('close')));
+  dispatch(setModal({
+    modalState: enumModalState('close'),
+    name: null,
+    data: {},
+  }));
+};
+
+const renderModal = (modalName, show, onHide) => {
+  if (!modalName) {
+    return null;
+  }
+  const ComponentModal = getModalForChannel(modalName);
+  return <ComponentModal show={show} onHide={onHide} />;
 };
 
 export default () => {
-  const { app, channels } = useSelector((state) => state);
+  const { app } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
     errors: appErrors,
     modalState,
     modalName,
-    modalData,
   } = app;
   const showModal = modalState === enumModalState('open');
-  const channelsList = channels.list;
   return (
     <div className="row h-100 pb-3">
       <div className="col-3 border-right">
@@ -36,13 +45,7 @@ export default () => {
         </div>
         <WarningPanel errors={appErrors} />
       </div>
-      <Modal show={showModal} onHide={handleCloseModal(dispatch)}>
-        <ModalChannel
-          modalData={{ ...modalData, channelsList }}
-          modalName={modalName}
-          onHide={handleCloseModal(dispatch)}
-        />
-      </Modal>
+      {renderModal(modalName, showModal, handleCloseModal(dispatch))}
     </div>
   );
 };

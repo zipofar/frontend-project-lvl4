@@ -17,7 +17,7 @@ const MsgForm = () => {
     initialValues: {
       message: '',
     },
-    validate: values => {
+    validate: (values) => {
       const errors = {};
       if (!values.message) {
         errors.message = 'Required message text';
@@ -26,7 +26,7 @@ const MsgForm = () => {
     },
     onSubmit: async ({ message }, { resetForm }) => {
       await dispatch(
-        sendMessage({ message, ...user }, activeChannelId, { resetForm })
+        sendMessage({ message, ...user }, activeChannelId, { resetForm }),
       );
     },
   });

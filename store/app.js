@@ -26,7 +26,7 @@ const appSlice = createSlice({
   initialState: {
     connectionState: '',
     modalState: enumModalState('close'),
-    modalName: '',
+    modalName: null,
     modalData: {},
     errors: [],
   },

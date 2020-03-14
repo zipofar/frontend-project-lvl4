@@ -1,17 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../src/routes';
-import utils from '../src/utils';
 
 /* eslint no-param-reassign: 0 */
-
-const { setupEnum } = utils;
-
-export const enumStateLoadingChannel = setupEnum([
-  'request',
-  'success',
-  'failed',
-]);
 
 const channelsSlice = createSlice({
   name: 'channels',
@@ -19,7 +10,6 @@ const channelsSlice = createSlice({
     list: [],
     activeChannelId: null,
     error: null,
-    loading: '',
   },
   reducers: {
     initChannels: (state, { payload }) => {
@@ -30,15 +20,9 @@ const channelsSlice = createSlice({
     },
     actionChannelRequest: (state) => {
       state.error = null;
-      state.loading = enumStateLoadingChannel('request');
-    },
-    actionChannelSuccess: (state) => {
-      state.error = null;
-      state.loading = enumStateLoadingChannel('success');
     },
     actionChannelFailed: (state, { payload }) => {
       state.error = payload;
-      state.loading = enumStateLoadingChannel('failed');
     },
     addChannelSuccess: (state, { payload }) => {
       state.list.push({ ...payload });
@@ -59,7 +43,6 @@ export const {
   initChannels,
   setActiveChannelId,
   actionChannelRequest,
-  actionChannelSuccess,
   actionChannelFailed,
   addChannelSuccess,
   updateChannelSuccess,
@@ -78,7 +61,6 @@ export const createChannel = (data, { onHideModal }) => async (dispatch) => {
     });
 
     onHideModal();
-    dispatch(actionChannelSuccess());
   } catch (err) {
     dispatch(actionChannelFailed(err.toString()));
   }
@@ -94,7 +76,6 @@ export const editChannel = (data, { onHideModal }) => async (dispatch) => {
     });
 
     onHideModal();
-    dispatch(actionChannelSuccess());
   } catch (err) {
     dispatch(actionChannelFailed(err.toString()));
   }
@@ -106,7 +87,6 @@ export const removeChannel = ({ channelId, channelsList }, { onHideModal }) => a
     await axios.delete(routes.channelPath(channelId));
     const idFirstChannel = channelsList[0].id;
     onHideModal();
-    dispatch(actionChannelSuccess());
     dispatch(setActiveChannelId(idFirstChannel));
   } catch (err) {
     dispatch(actionChannelFailed(err.toString()));
