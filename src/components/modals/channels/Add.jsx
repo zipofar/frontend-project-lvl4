@@ -7,20 +7,18 @@ import {
   Button,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { editChannel } from '../../../store/channels';
-import { enumConnectionState } from '../../../store/app';
+import { createChannel } from '../../../../store/channels';
+import { enumConnectionState } from '../../../../store/app';
 
 export default (props) => {
   const { show, onHide } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputEl = useRef(null);
-  const { app, channels } = useSelector((state) => state);
-  const { connectionState, modalData: { channelId } } = app;
-  const currentChannel = channels.list.filter(({ id }) => id === channelId)[0];
+  const { app: { connectionState }, channels } = useSelector((state) => state);
   const isDisconnect = connectionState === enumConnectionState('disconnect');
   const formik = useFormik({
-    initialValues: { channelName: currentChannel.name },
+    initialValues: { channelName: '' },
     validate: (values) => {
       const errors = {};
       if (!values.channelName.trim()) {
@@ -32,9 +30,9 @@ export default (props) => {
       return errors;
     },
     onSubmit: async (values) => {
-      const data = { name: values.channelName, channelId };
+      const data = { name: values.channelName };
       const actions = { onHideModal: onHide };
-      await dispatch(editChannel(data, actions));
+      await dispatch(createChannel(data, actions));
     },
   });
 
@@ -46,7 +44,7 @@ export default (props) => {
     <Modal show={show} onHide={onHide}>
       <Form onSubmit={formik.handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>{t('modal.titleEditChannel')}</Modal.Title>
+          <Modal.Title>{t('modal.titleCreateChannel')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
@@ -55,7 +53,6 @@ export default (props) => {
               placeholder={t('modal.enterChannelName')}
               name="channelName"
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
               value={formik.values.channelName}
               disabled={formik.isSubmitting || isDisconnect}
             />

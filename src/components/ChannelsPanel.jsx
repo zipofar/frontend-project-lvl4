@@ -8,8 +8,8 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 
-import { setActiveChannelId } from '../store/channels';
-import { setModal, enumModalState, enumModalName } from '../store/app';
+import { setActiveChannelId } from '../../store/channels';
+import { setModal, enumModalState, enumModalName } from '../../store/app';
 
 /* eslint jsx-a11y/control-has-associated-label: 0 */
 /* eslint jsx-a11y/anchor-is-valid: 0 */

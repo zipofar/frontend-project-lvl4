@@ -7,8 +7,8 @@ import {
   Button,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeChannel } from '../../../store/channels';
-import { enumConnectionState } from '../../../store/app';
+import { removeChannel } from '../../../../store/channels';
+import { enumConnectionState } from '../../../../store/app';
 
 export default (props) => {
   const { show, onHide } = props;

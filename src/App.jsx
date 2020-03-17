@@ -1,12 +1,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import MsgForm from './MsgForm';
-import MsgContainer from './MsgContainer';
-import ChannelsPanel from './ChannelsPanel';
-import WarningPanel from './WarningPanel';
+import MsgForm from './components/MsgForm';
+import MsgContainer from './components/MsgContainer';
+import ChannelsPanel from './components/ChannelsPanel';
+import WarningPanel from './components/WarningPanel';
 import { enumModalState, setModal } from '../store/app';
-import getModalForChannel from './modals/channels';
+import getModalForChannel from './components/modals/channels';
 
 const handleCloseModal = (dispatch) => () => {
   dispatch(setModal({
