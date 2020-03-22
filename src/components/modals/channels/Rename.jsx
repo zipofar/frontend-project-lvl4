@@ -31,9 +31,10 @@ export default (props) => {
       }
       return errors;
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setErrors }) => {
       const data = { name: values.channelName, channelId };
-      const actions = { onHideModal: onHide };
+      const setError = (msg) => setErrors({ channelName: msg });
+      const actions = { onHideModal: onHide, setError };
       await dispatch(editChannel(data, actions));
     },
   });
@@ -64,7 +65,7 @@ export default (props) => {
             style={{ display: 'block', height: '1rem' }}
             className="invalid-feedback"
           >
-            {formik.errors.channelName || channels.error}
+            {formik.errors.channelName}
           </div>
         </Modal.Body>
         <Modal.Footer>

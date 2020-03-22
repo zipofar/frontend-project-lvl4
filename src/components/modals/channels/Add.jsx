@@ -15,7 +15,7 @@ export default (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputEl = useRef(null);
-  const { app: { connectionState }, channels } = useSelector((state) => state);
+  const { app: { connectionState } } = useSelector((state) => state);
   const isDisconnect = connectionState === enumConnectionState('disconnect');
   const formik = useFormik({
     initialValues: { channelName: '' },
@@ -29,9 +29,10 @@ export default (props) => {
       }
       return errors;
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setErrors }) => {
       const data = { name: values.channelName };
-      const actions = { onHideModal: onHide };
+      const setError = (msg) => setErrors({ channelName: msg });
+      const actions = { onHideModal: onHide, setError };
       await dispatch(createChannel(data, actions));
     },
   });
@@ -61,7 +62,7 @@ export default (props) => {
             style={{ display: 'block', height: '1rem' }}
             className="invalid-feedback"
           >
-            {formik.errors.channelName || channels.error}
+            {formik.errors.channelName}
           </div>
         </Modal.Body>
         <Modal.Footer>

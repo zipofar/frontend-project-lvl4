@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../src/routes';
+import { removeChannelSuccess } from './channels';
 
 /* eslint no-param-reassign: 0 */
 
@@ -8,55 +9,42 @@ const msgSlice = createSlice({
   name: 'msg',
   initialState: {
     messages: [],
-    error: null,
   },
   reducers: {
-    initMessages: (state, { payload }) => {
-      state.messages = [...payload];
+    initMessages: (state, { payload: { messages } }) => {
+      state.messages = [...messages];
     },
-    actionMsgRequest: (state) => {
-      state.error = null;
+    addMsgSuccess: (state, { payload: { message } }) => {
+      state.messages.push({ ...message });
     },
-    actionMsgSuccess: (state) => {
-      state.error = null;
-    },
-    actionMsgFailed: (state, { payload }) => {
-      state.error = payload;
-    },
-    addMsgSuccess: (state, { payload }) => {
-      state.messages.push({ ...payload });
-    },
-    removeMsgSuccess: (state, { payload }) => {
-      state.messages = state.messages.filter(({ channelId }) => channelId !== payload);
+  },
+  extraReducers: {
+    [removeChannelSuccess]: (state, { payload: { channelId } }) => {
+      state.messages = state.messages.filter((e) => e.channelId !== channelId);
     },
   },
 });
 
 export const {
   initMessages,
-  actionMsgRequest,
-  actionMsgSuccess,
-  actionMsgFailed,
   addMsgSuccess,
   removeMsgSuccess,
 } = msgSlice.actions;
 
-export const sendMessage = (data, channdelId, { resetForm }) => async (dispatch) => {
-  dispatch(actionMsgRequest());
+export const sendMessage = (data, channelId, { resetForm, setError }) => async (dispatch) => {
   let res;
   try {
-    res = await axios.post(routes.channelMessagesPath(channdelId), {
+    res = await axios.post(routes.channelMessagesPath(channelId), {
       data: {
         attributes: { ...data },
       },
     });
 
-    const { data: { data: { attributes } } } = res;
-    dispatch(actionMsgSuccess());
-    dispatch(addMsgSuccess(attributes));
+    const { data: { data: { attributes: message } } } = res;
+    dispatch(addMsgSuccess({ message }));
     resetForm();
   } catch (err) {
-    dispatch(actionMsgFailed(err.toString()));
+    setError(err.toString());
   }
 };
 

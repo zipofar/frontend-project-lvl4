@@ -20,9 +20,10 @@ export default (props) => {
   const isDisconnect = connectionState === enumConnectionState('disconnect');
   const formik = useFormik({
     initialValues: {},
-    onSubmit: async () => {
+    onSubmit: async (values, { setErrors }) => {
       const data = { channelId, channelsList: channels.list };
-      const actions = { onHideModal: onHide };
+      const setError = (msg) => setErrors({ networkErr: msg });
+      const actions = { onHideModal: onHide, setError };
       await dispatch(removeChannel(data, actions));
     },
   });
@@ -42,7 +43,7 @@ export default (props) => {
             style={{ display: 'block', height: '1rem' }}
             className="invalid-feedback"
           >
-            {channels.error}
+            {formik.errors.networkErr}
           </div>
         </Modal.Body>
         <Modal.Footer>

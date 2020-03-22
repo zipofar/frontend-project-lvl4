@@ -1,11 +1,7 @@
 import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import {
-  Form,
-  Modal,
-  Button,
-} from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 import { sendMessage } from '../../store/messages';
 import { enumConnectionState } from '../../store/app';
@@ -13,7 +9,7 @@ import UserContext from '../../store/userContext';
 
 const MsgForm = () => {
   const dispatch = useDispatch();
-  const { app, msg, channels } = useSelector((state) => state);
+  const { app, channels } = useSelector((state) => state);
   const { connectionState } = app;
   const isDisconnect = connectionState === enumConnectionState('disconnect');
   const { activeChannelId } = channels;
@@ -29,30 +25,30 @@ const MsgForm = () => {
       }
       return errors;
     },
-    onSubmit: async ({ message }, { resetForm }) => {
+    onSubmit: async ({ message }, formikBag) => {
+      const { resetForm, setErrors } = formikBag;
+      const setError = (msg) => setErrors({ channelName: msg });
       await dispatch(
-        sendMessage({ message, ...user }, activeChannelId, { resetForm }),
+        sendMessage({ message, ...user }, activeChannelId, { resetForm, setError }),
       );
     },
   });
-
-  const isValidated = !formik.errors.message || !msg.error;
 
   return (
     <div className="mt-auto">
       <Form onSubmit={formik.handleSubmit}>
         <Form.Group>
-            <Form.Control
-              type="input"
-              name="message"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.message}
-              className="form-control"
-              disabled={formik.isSubmitting || isDisconnect}
-            />
+          <Form.Control
+            type="input"
+            name="message"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.message}
+            className="form-control"
+            disabled={formik.isSubmitting || isDisconnect}
+          />
           <Form.Control.Feedback className="d-block" type="invalid">
-            {formik.errors.message || msg.error}
+            {formik.errors.message}
           </Form.Control.Feedback>
         </Form.Group>
       </Form>

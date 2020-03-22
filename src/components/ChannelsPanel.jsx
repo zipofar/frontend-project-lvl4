@@ -86,7 +86,7 @@ const ChannelsPanel = () => {
                 variant={activeChannelId === id ? 'primary' : 'light'}
                 className="text-left"
                 onKeyUp={handlePressEnterOnChannelName(id, dispatch)}
-                onClick={() => { dispatch(setActiveChannelId(id)); }}
+                onClick={() => dispatch(setActiveChannelId({ channelId: id }))}
               >
                 {name}
               </Button>

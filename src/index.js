@@ -18,7 +18,6 @@ import rootReducer from '../store';
 import {
   initMessages,
   addMsgSuccess,
-  removeMsgSuccess,
 } from '../store/messages';
 import {
   initChannels,
@@ -64,31 +63,30 @@ try {
   });
 
   socket.on('newMessage', (res) => {
-    const { data: { attributes } } = res;
-    if (attributes.userId !== user.userId) {
-      store.dispatch(addMsgSuccess(attributes));
+    const { data: { attributes: message } } = res;
+    if (message.userId !== user.userId) {
+      store.dispatch(addMsgSuccess({ message }));
     }
   });
 
   socket.on('newChannel', (res) => {
-    const { data: { attributes } } = res;
-    store.dispatch(addChannelSuccess(attributes));
+    const { data: { attributes: channel } } = res;
+    store.dispatch(addChannelSuccess({ channel }));
   });
 
   socket.on('renameChannel', (res) => {
-    const { data: { attributes } } = res;
-    store.dispatch(updateChannelSuccess(attributes));
+    const { data: { attributes: channel } } = res;
+    store.dispatch(updateChannelSuccess({ channel }));
   });
 
   socket.on('removeChannel', (res) => {
     const { data: { id } } = res;
-    store.dispatch(removeChannelSuccess(id));
-    store.dispatch(removeMsgSuccess(id));
+    store.dispatch(removeChannelSuccess({ channelId: id }));
   });
 
-  store.dispatch(initMessages(gon.messages));
-  store.dispatch(initChannels(gon.channels));
-  store.dispatch(setActiveChannelId(gon.currentChannelId));
+  store.dispatch(initMessages({ messages: gon.messages }));
+  store.dispatch(initChannels({ channels: gon.channels }));
+  store.dispatch(setActiveChannelId({ channelId: gon.currentChannelId }));
 
   ReactDOM.render(
     <Provider store={store}>
