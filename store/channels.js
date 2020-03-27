@@ -12,7 +12,7 @@ const channelsSlice = createSlice({
   },
   reducers: {
     initChannels: (state, { payload: { channels } }) => {
-      state.list = [...channels];
+      state.list = channels;
     },
     setActiveChannelId: (state, { payload: { channelId } }) => {
       state.activeChannelId = channelId;
@@ -22,9 +22,11 @@ const channelsSlice = createSlice({
     },
     updateChannelSuccess: (state, { payload: { channel: updatedChannel } }) => {
       const { id: currentChannelId } = updatedChannel;
-      state.list = state.list.map((channel) => (
-        channel.id === currentChannelId ? updatedChannel : channel
-      ));
+      state.list.forEach((channel, i) => {
+        if (channel.id === currentChannelId) {
+          state.list[i] = updatedChannel;
+        }
+      });
     },
     removeChannelSuccess: (state, { payload: { channelId } }) => {
       state.list = state.list.filter(({ id }) => id !== channelId);
@@ -53,6 +55,7 @@ export const createChannel = (data, { onHideModal, setError }) => async () => {
     onHideModal();
   } catch (err) {
     setError(err.toString());
+    throw err;
   }
 };
 
@@ -67,6 +70,7 @@ export const editChannel = (data, { onHideModal, setError }) => async () => {
     onHideModal();
   } catch (err) {
     setError(err.toString());
+    throw err;
   }
 };
 
@@ -80,5 +84,6 @@ export const removeChannel = (data, actions) => async (dispatch) => {
     dispatch(setActiveChannelId({ channelId: idFirstChannel }));
   } catch (err) {
     setError(err.toString());
+    throw err;
   }
 };

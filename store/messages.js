@@ -12,10 +12,10 @@ const msgSlice = createSlice({
   },
   reducers: {
     initMessages: (state, { payload: { messages } }) => {
-      state.messages = [...messages];
+      state.messages = messages;
     },
     addMsgSuccess: (state, { payload: { message } }) => {
-      state.messages.push({ ...message });
+      state.messages.push(message);
     },
   },
   extraReducers: {
@@ -45,6 +45,7 @@ export const sendMessage = (data, channelId, { resetForm, setError }) => async (
     resetForm();
   } catch (err) {
     setError(err.toString());
+    throw err;
   }
 };
 
