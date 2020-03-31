@@ -22,11 +22,8 @@ const channelsSlice = createSlice({
     },
     updateChannelSuccess: (state, { payload: { channel: updatedChannel } }) => {
       const { id: currentChannelId } = updatedChannel;
-      state.list.forEach((channel, i) => {
-        if (channel.id === currentChannelId) {
-          state.list[i] = updatedChannel;
-        }
-      });
+      const indexUpdatedChannel = state.list.findIndex(({ id }) => id === currentChannelId);
+      state.list[indexUpdatedChannel] = updatedChannel;
     },
     removeChannelSuccess: (state, { payload: { channelId } }) => {
       state.list = state.list.filter(({ id }) => id !== channelId);
